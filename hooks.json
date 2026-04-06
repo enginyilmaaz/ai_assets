@@ -1,0 +1,112 @@
+{
+  "UserPromptSubmit": [
+    {
+      "code": "GEN_HOOK_COMMIT",
+      "description": "Auto-trigger commit skill when git commit/push keywords are mentioned",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "jq -r 'if (.prompt // \"\" | test(\"commitle|pushla|commit and push|commit ve push|commit at|push at|commiti at|değişiklikleri gönder\"; \"i\")) then {\"hookSpecificOutput\": {\"hookEventName\": \"UserPromptSubmit\", \"additionalContext\": \"IMPORTANT: The user wants to commit/push. You MUST invoke the commit skill using the Skill tool BEFORE doing anything else.\"}} else {} end'",
+          "timeout": 5,
+          "statusMessage": "Checking for commit/push references..."
+        }
+      ]
+    },
+    {
+      "code": "GEN_HOOK_PLAYWRIGHT",
+      "description": "Auto-trigger playwright skill when E2E/Playwright testing is mentioned",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "jq -r 'if (.prompt // \"\" | test(\"playwright|e2e test|end.?to.?end|ui test|browser test|test yaz|test çalıştır\"; \"i\")) then {\"hookSpecificOutput\": {\"hookEventName\": \"UserPromptSubmit\", \"additionalContext\": \"IMPORTANT: The user mentioned E2E/Playwright testing. You MUST invoke the playwright skill using the Skill tool BEFORE doing anything else.\"}} else {} end'",
+          "timeout": 5,
+          "statusMessage": "Checking for Playwright references..."
+        }
+      ]
+    },
+    {
+      "code": "GEN_HOOK_ANALYZE",
+      "description": "Auto-trigger analyze skill when code analysis/audit is mentioned",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "jq -r 'if (.prompt // \"\" | test(\"analiz et|kodu analiz|analyze this|code audit|performans analiz|complexity analysis\"; \"i\")) then {\"hookSpecificOutput\": {\"hookEventName\": \"UserPromptSubmit\", \"additionalContext\": \"IMPORTANT: The user wants code analysis. You MUST invoke the analyze skill using the Skill tool BEFORE doing anything else.\"}} else {} end'",
+          "timeout": 5,
+          "statusMessage": "Checking for analysis references..."
+        }
+      ]
+    },
+    {
+      "code": "GEN_HOOK_OPTIMIZE",
+      "description": "Auto-trigger optimize skill when performance optimization is mentioned",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "jq -r 'if (.prompt // \"\" | test(\"optimize|optimizasyon|performans iyileştir|kodu optimize|reduce complexity|N\\+1\"; \"i\")) then {\"hookSpecificOutput\": {\"hookEventName\": \"UserPromptSubmit\", \"additionalContext\": \"IMPORTANT: The user wants code optimization. You MUST invoke the optimize skill using the Skill tool BEFORE doing anything else.\"}} else {} end'",
+          "timeout": 5,
+          "statusMessage": "Checking for optimization references..."
+        }
+      ]
+    },
+    {
+      "code": "GEN_HOOK_CODE_REVIEW",
+      "description": "Auto-trigger code-review skill when code review is mentioned",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "jq -r 'if (.prompt // \"\" | test(\"code review|kod review|review my code|kodu kontrol et|kod kontrolü|naming convention\"; \"i\")) then {\"hookSpecificOutput\": {\"hookEventName\": \"UserPromptSubmit\", \"additionalContext\": \"IMPORTANT: The user wants a code review. You MUST invoke the code-review skill using the Skill tool BEFORE doing anything else.\"}} else {} end'",
+          "timeout": 5,
+          "statusMessage": "Checking for code review references..."
+        }
+      ]
+    },
+    {
+      "code": "GEN_HOOK_SCAFFOLD_FULLSTACK",
+      "description": "Auto-trigger fullstack-scaffold skill when full-stack project creation is mentioned",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "jq -r 'if (.prompt // \"\" | test(\"fullstack scaffold|full.?stack proje|hem backend hem frontend|scaffold full project\"; \"i\")) then {\"hookSpecificOutput\": {\"hookEventName\": \"UserPromptSubmit\", \"additionalContext\": \"IMPORTANT: The user wants to scaffold a full-stack project. You MUST invoke the fullstack-scaffold skill using the Skill tool BEFORE doing anything else.\"}} else {} end'",
+          "timeout": 5,
+          "statusMessage": "Checking for fullstack scaffold references..."
+        }
+      ]
+    },
+    {
+      "code": "GEN_HOOK_SCAFFOLD_BACKEND",
+      "description": "Auto-trigger nodejs-backend-scaffold skill when backend project creation is mentioned",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "jq -r 'if (.prompt // \"\" | test(\"backend scaffold|backend proje|yeni backend|new backend project|scaffold backend\"; \"i\")) then {\"hookSpecificOutput\": {\"hookEventName\": \"UserPromptSubmit\", \"additionalContext\": \"IMPORTANT: The user wants to scaffold a backend project. You MUST invoke the nodejs-backend-scaffold skill using the Skill tool BEFORE doing anything else.\"}} else {} end'",
+          "timeout": 5,
+          "statusMessage": "Checking for backend scaffold references..."
+        }
+      ]
+    },
+    {
+      "code": "GEN_HOOK_SCAFFOLD_FRONTEND",
+      "description": "Auto-trigger nextjs-frontend-scaffold skill when frontend project creation is mentioned",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "jq -r 'if (.prompt // \"\" | test(\"frontend scaffold|frontend proje|yeni frontend|new frontend project|scaffold frontend\"; \"i\")) then {\"hookSpecificOutput\": {\"hookEventName\": \"UserPromptSubmit\", \"additionalContext\": \"IMPORTANT: The user wants to scaffold a frontend project. You MUST invoke the nextjs-frontend-scaffold skill using the Skill tool BEFORE doing anything else.\"}} else {} end'",
+          "timeout": 5,
+          "statusMessage": "Checking for frontend scaffold references..."
+        }
+      ]
+    },
+    {
+      "code": "GEN_HOOK_JIRA_API",
+      "description": "Auto-trigger jira-api skill when Jira references are mentioned",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "jq -r 'if (.prompt // \"\" | test(\"jira|JIRA|Jira|jira attachment|jira issue\"; \"i\")) then {\"hookSpecificOutput\": {\"hookEventName\": \"UserPromptSubmit\", \"additionalContext\": \"IMPORTANT: The user mentioned Jira. You MUST invoke the jira-api skill using the Skill tool BEFORE doing anything else.\"}} else {} end'",
+          "timeout": 5,
+          "statusMessage": "Checking for Jira references..."
+        }
+      ]
+    }
+  ]
+}

@@ -16,10 +16,13 @@ For project-specific workflows (ERP task automation, Playwright verification), s
 
 ## CRITICAL RULES
 
-1. **Only use APIs documented in this skill.** Do NOT search the web, guess endpoints, or invent API calls. If an operation is not listed here, ask the user.
-2. **If an API call fails, report the error to the user.** Do NOT retry with different/guessed endpoints. Show the HTTP status code and error message, then ask how to proceed.
-3. **MCP first, REST API fallback.** Always try MCP tools first. Only use REST API for operations MCP cannot do (attachments) or when MCP explicitly fails.
-4. **NEVER use Python.** All API calls, credential reads, and scripting MUST use `node -e`. No `python3`, no `python`, no `.py` files. Node.js is the only runtime allowed in this skill.
+1. **Only do what you are told.** Even if you have full permissions, understand the exact scope of the request and do not go beyond it. Never do something that was not explicitly asked. Never delete anything unless told to delete. Never remove anything unless told to remove.
+2. **Review before acting.** Before making any changes, check and review first. Never modify, delete, or create files that were not specifically mentioned or approved by the user, even if you have permission to do so.
+3. **Answer directly when asked.** If the user asks whether you did, updated, or changed something, answer with a clear yes or no and the reason. For example: "No, I did not update X because Y." Do not dodge the question.
+4. **Only use APIs documented in this skill.** Do NOT search the web, guess endpoints, or invent API calls. If an operation is not listed here, ask the user.
+5. **If an API call fails, report the error to the user.** Do NOT retry with different/guessed endpoints. Show the HTTP status code and error message, then ask how to proceed.
+6. **MCP first, REST API fallback.** Always try MCP tools first. Only use REST API for operations MCP cannot do (attachments) or when MCP explicitly fails.
+7. **NEVER use Python.** All API calls, credential reads, and scripting MUST use `node -e`. No `python3`, no `python`, no `.py` files. Node.js is the only runtime allowed in this skill.
 
 ---
 

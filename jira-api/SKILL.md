@@ -23,6 +23,8 @@ For project-specific workflows (ERP task automation, Playwright verification), s
 5. **If an API call fails, report the error to the user.** Do NOT retry with different/guessed endpoints. Show the HTTP status code and error message, then ask how to proceed.
 6. **MCP first, REST API fallback.** Always try MCP tools first. Only use REST API for operations MCP cannot do (attachments) or when MCP explicitly fails.
 7. **NEVER use Python.** All API calls, credential reads, and scripting MUST use `node -e`. No `python3`, no `python`, no `.py` files. Node.js is the only runtime allowed in this skill.
+8. **Task-scoped commit/push.** When working on a Jira task and the user says "commit" or "push", ONLY commit/push the changes related to that task. Unrelated changes MUST NOT be deleted, stashed, reverted, or included in the commit/push. They must remain in the working directory exactly as they were. Use explicit `git add <file>` for task-related files only — never `git add -A`, `git add .`, or `git stash`.
+9. **Stay within the working directory.** Never go outside the current working directory to make changes, even if you have full skip/permission privileges. Only operate outside the working directory if the user explicitly specifies a path (e.g., "check XX path and change this"). Default: all operations happen inside the current working directory.
 
 ---
 

@@ -47,18 +47,6 @@
           "statusMessage": "Checking for code review references..."
         }
       ]
-    },
-    {
-      "code": "GEN_HOOK_PLAYWRIGHT",
-      "description": "Auto-trigger playwright skill when Playwright/E2E testing is explicitly requested",
-      "hooks": [
-        {
-          "type": "command",
-          "command": "jq -r 'if (.prompt // \"\" | test(\"\\\\bpw\\\\b|\\\\bpwght\\\\b|playwright|e2e test|with pw\\\\b\"; \"i\")) then {\"hookSpecificOutput\": {\"hookEventName\": \"UserPromptSubmit\", \"additionalContext\": \"IMPORTANT: The user wants Playwright/E2E testing. You MUST invoke the playwright skill using the Skill tool BEFORE doing anything else.\"}} else empty end'",
-          "timeout": 5,
-          "statusMessage": "Checking for Playwright references..."
-        }
-      ]
     }
   ]
 }

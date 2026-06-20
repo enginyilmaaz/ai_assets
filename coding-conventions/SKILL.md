@@ -1,10 +1,10 @@
 ---
 name: coding-conventions
-description: Proactively apply Smartmarine coding standards (SM23001) WHILE writing code - naming, new-file placement, readability, modularity, SOLID, design patterns, max file/line size, English comments. Invoke BEFORE and WHILE creating or editing ANY code in any stack (.NET/C#, Angular, Node/TS, etc.). Usage examples - writing new code, creating a file, adding a function/class/endpoint/component, implementing a feature, refactoring; 'kod yaz', 'yeni dosya olustur', 'fonksiyon ekle', 'class ekle', 'feature yaz', 'endpoint ekle', 'component olustur'.
+description: Proactively apply the project coding standards WHILE writing code - naming, new-file placement, readability, modularity, SOLID, design patterns, max file/line size, English comments. Invoke BEFORE and WHILE creating or editing ANY code in any stack (.NET/C#, Angular, Node/TS, etc.). Usage examples - writing new code, creating a file, adding a function/class/endpoint/component, implementing a feature, refactoring; 'kod yaz', 'yeni dosya olustur', 'fonksiyon ekle', 'class ekle', 'feature yaz', 'endpoint ekle', 'component olustur'.
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob, Agent
 ---
 
-# Coding Conventions (Proactive - SM23001)
+# Coding Conventions (Proactive)
 
 Apply this BEFORE and WHILE writing code, not after. It is the **proactive twin** of the
 `code-review` skill: both enforce the SAME rules from one source of truth.
@@ -54,9 +54,8 @@ wrapper - it does not duplicate the rules.
 
 ## Relationship to other skills
 
-- **Complementary** to domain skills (`erp`, `erp-frontend`, `sp`, `dm`, the scaffolds): those
-  define architecture/structure; this defines cross-cutting naming, readability, and practices.
-  Domain skill wins on architecture; this skill wins on style/conventions; local convention
-  wins over both.
+- **Complementary** to domain/scaffolding skills: those define architecture/structure; this
+  defines cross-cutting naming, readability, and practices. The domain skill wins on
+  architecture; this skill wins on style/conventions; local convention wins over both.
 - **Reactive counterpart:** run the `code-review` skill to audit code after the fact. Same rules,
   different timing.

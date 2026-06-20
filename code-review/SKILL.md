@@ -1,11 +1,11 @@
 ---
 name: code-review
-description: Code review based on Smartmarine coding standards - Naming conventions, coding practices, file structure, readability checks. Usage examples - 'review this code', 'check naming conventions', 'review my changes', 'kod kontrolu yap'
+description: Code review based on the project coding standards - Naming conventions, coding practices, file structure, readability checks. Usage examples - 'review this code', 'check naming conventions', 'review my changes', 'kod kontrolu yap'
 allowed-tools: Read, Edit, Bash, Grep, Glob, Agent
 argument-hint: [file or description to review]
 ---
 
-# Smartmarine Coding Standards Review
+# Coding Standards Review
 
 ## CRITICAL RULES
 
@@ -17,7 +17,7 @@ argument-hint: [file or description to review]
 
 ---
 
-You are a code reviewer that enforces the Smartmarine coding standards document (SM23001). Review the given code or files and report violations, then fix them.
+You are a code reviewer that enforces the project coding standards. Review the given code or files and report violations, then fix them.
 
 For detailed rules see: [coding-standards.md](coding-standards.md)
 

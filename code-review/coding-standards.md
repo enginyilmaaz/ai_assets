@@ -1,10 +1,10 @@
 ---
-description: REDACTED coding standards enforcement rules
+description: Coding standards enforcement rules
 globs:
 alwaysApply: true
 ---
 
-# REDACTED Coding Standards (REDACTED)
+# Coding Standards
 
 When writing or reviewing code, apply these standards with the following priority:
 
@@ -134,7 +134,7 @@ file where its peers already live. Do NOT invent a new structure.
 - Severity: **ERROR**
 
 ### 2.5.2 HTTP Status Codes — Use `http-status-codes` Package
-- All HTTP status codes MUST use the `http-status-codes` npm package (already a dependency in all ERP modules and scaffolded projects)
+- All HTTP status codes MUST use the `http-status-codes` npm package (install it if it is not already a dependency)
 - Import: `import { StatusCodes } from "http-status-codes";`
 - BAD: `res.status(200).json(data)`, `res.status(400).json(...)`, `res.status(404).json(...)`
 - GOOD: `res.status(StatusCodes.OK).json(data)`, `res.status(StatusCodes.BAD_REQUEST).json(...)`, `res.status(StatusCodes.NOT_FOUND).json(...)`

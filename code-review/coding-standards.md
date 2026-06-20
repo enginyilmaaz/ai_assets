@@ -34,6 +34,23 @@ This scan informs how you write code — especially for user-facing strings (see
 
 ---
 
+## 0.2 New File Placement — Mirror the Existing Project Logic
+
+**Before creating any new file**, analyze the project's logic and architecture, then place the
+file where its peers already live. Do NOT invent a new structure.
+
+1. **Analyze first** — understand how the project is organized (layers, modules, domains) and how
+   an existing similar feature is wired end-to-end (e.g. router → controller → service →
+   data-access, or component → service → model).
+2. **Find the peers** — locate existing files of the same kind (another controller, service,
+   component, migration) and follow their location, naming, and internal shape.
+3. **Place accordingly** — put the new file next to its peers, in the matching folder, using the
+   matching file-name convention for that stack.
+4. **Reuse before adding** — if a helper/util/base already exists, use it instead of creating a
+   duplicate. Only add a new file when no existing place fits.
+
+---
+
 ## 1. Naming Conventions
 
 ### 1.1 PascalCase for Classes, Types, Constructors
@@ -88,19 +105,24 @@ This scan informs how you write code — especially for user-facing strings (see
 ### 2.1 One Class Per File
 - Each `.ts` file should contain at most one class
 
-### 2.2 Max 500 Lines Per File
-- If a file exceeds 500 lines, use extract class refactoring to split by responsibility
+### 2.2 Max 800 Lines Per File
+- If a file exceeds 800 lines, use extract class refactoring to split by responsibility
+- Severity: **WARNING**
 
 ### 2.3 Max 4 Parameters Per Method
 - If a method needs more than 4 parameters, use an object/type parameter instead
 - BAD: `function saveUser(name: string, surname: string, age: number, address: string, email: string)`
 - GOOD: `function saveUser(userData: IUserData)`
 
-### 2.4 Max 140 Characters Per Line
+### 2.4 Max 130 Characters Per Line (target 120)
+- Aim for 120 characters per line; 130 is the hard limit
 - Break long lines into multiple lines for readability
+- Severity: **WARNING**
 
-### 2.5 No Obvious Comments
-- Code should be self-explanatory through clear naming
+### 2.5 Comments — No Obvious Comments, but Explain the Non-Obvious
+- Code should be self-explanatory through clear naming — never add comments that just restate the code
+- When logic is NOT self-explanatory (non-trivial algorithm, business rule, workaround, or a
+  non-obvious "why"), add a short (a few lines) explanatory comment **in English** describing the WHY
 - Only add comments for algorithmic or complex operations
 - Never hard-code magic numbers; use named constants instead
 
@@ -187,6 +209,40 @@ This scan informs how you write code — especially for user-facing strings (see
 
 ---
 
+### 2.13 Readability & Modularity
+- Code must be easy to read first, clever second — optimize for the next human reader
+- Build small, single-purpose units (functions, classes, modules), each with one clear responsibility
+- Communicate through well-defined interfaces; a unit's internals should be changeable without
+  breaking its consumers
+- When a file or function grows large or does several unrelated things, that is a signal to split it
+
+### 2.14 SOLID Principles
+Apply SOLID when designing classes and modules:
+- **S**ingle Responsibility — one reason to change per class/module
+- **O**pen/Closed — open for extension, closed for modification (extend via new types/strategies,
+  not by editing stable code)
+- **L**iskov Substitution — subtypes must be usable wherever their base type is expected
+- **I**nterface Segregation — many small, focused interfaces over one fat interface
+- **D**ependency Inversion — depend on abstractions/interfaces, not concrete implementations
+  (inject dependencies; see also §2.11 Interfaces for Classes)
+
+### 2.15 Design Patterns — Right Pattern for the Problem
+- Prefer well-known design patterns over ad-hoc solutions **when one genuinely fits** the problem
+- Choose the pattern that matches the intent, for example:
+  - **Factory / Abstract Factory** — centralize and decouple object creation
+  - **Strategy** — swap interchangeable algorithms/behaviors at runtime
+  - **Repository** — abstract data access away from business logic (already the standard here, §3)
+  - **Adapter** — bridge incompatible interfaces (e.g. wrapping a 3rd-party/legacy API)
+  - **Observer / Pub-Sub** — event-driven, decoupled notifications
+  - **Decorator** — add behavior without changing the original type
+  - **Singleton** — a single shared instance (use sparingly; prefer dependency injection)
+- **Do NOT force patterns / over-engineer (YAGNI).** A pattern that adds indirection without
+  solving a real problem is itself an anti-pattern. The simplest design that satisfies the
+  requirement and respects SOLID wins.
+- Severity: **INFO**
+
+---
+
 ## 3. Folder Structure
 
 - Services: `src/services/` (abstract: `src/services/abstract/`, concrete: `src/services/concrete/`)
@@ -195,6 +251,36 @@ This scan informs how you write code — especially for user-facing strings (see
 - Models: `src/models/`
 - Data Access: `src/data-access/` (abstract: `src/data-access/abstract/`, concrete: `src/data-access/concrete/`)
 - Helpers: `src/helpers/`
+
+---
+
+## 4. Stack-Specific Conventions
+
+Rules §1–§2 use a TypeScript/Node default. When the detected stack differs, the following
+stack-specific conventions override the generic naming/file rules (per Rule 0, the stack's
+idiomatic convention always wins).
+
+### 4.1 .NET / C#
+- **Methods & public properties: PascalCase** — `CalculateTotal()`, `public int CreditId { get; set; }`
+  (this OVERRIDES §1.2 camelCase-methods for C#)
+- **Parameters & local variables: camelCase** — `(int someNumber, string userEmail)`
+- **Private fields: `_camelCase`** — `private readonly IPaymentService _paymentService;`
+- **Interfaces: `I`-prefixed PascalCase** — `IPaymentService` (matches §1.3)
+- **Async methods end with `Async`** — `GetUserAsync()`
+- **File names: PascalCase, one type per file** — `PaymentController.cs`, `IPaymentService.cs`
+- **Constructor injection** for dependencies; program to interfaces (§2.14 DIP)
+- **i18n:** use resources / localizer (`_localizer["Key"]`), never hardcoded user-facing strings (§2.12)
+
+### 4.2 Angular
+- **Class names: PascalCase + role suffix** — `UserListComponent`, `AuthService`, `RoleGuard`,
+  `CurrencyPipe`, `AuthInterceptor`
+- **File names: kebab-case with type suffix** — `user-list.component.ts`, `auth.service.ts`,
+  `role.guard.ts` (this OVERRIDES §1.8 PascalCase-files for Angular)
+- **Component selectors: kebab-case with app prefix** — `app-user-list`
+- **Methods & members: camelCase**; **observables end with `$`** — `users$`
+- **One component/service/pipe per file**; keep components thin, push logic into services (§2.1, §2.13)
+- **Unsubscribe** from observables (takeUntil / async pipe) to avoid memory leaks
+- **i18n:** use the translate pipe — `{{ 'common.success' | translate }}` — never hardcoded strings (§2.12)
 
 ---
 

@@ -241,6 +241,46 @@ Apply SOLID when designing classes and modules:
   requirement and respects SOLID wins.
 - Severity: **INFO**
 
+### 2.16 UI / Frontend Design — Consistency, Reuse, and Color Discipline
+
+**Applies to all UI work (components, pages, screens).** Goal: a new screen must look like it has
+always been part of the same product — never a bolted-on afterthought.
+
+1. **Professional, clean, minimal.** Favour clarity and whitespace over decoration. No gratuitous
+   gradients, heavy shadows, extra borders, animations, or emoji. Every element must earn its place —
+   if it does not help the user understand or act, remove it.
+2. **Reuse the existing component library first.** Before building any UI, locate the project's
+   shared / design-system components (e.g. a `components/`, `@core/components/`, `ui/` folder) and use
+   them. Create a new component only when nothing existing fits, and then build it in the same style
+   and location as its peers (§0.2). Never re-implement a button, input, table, modal, or chip that
+   already exists.
+3. **Do not break the established design language.** Match the existing spacing scale, typography,
+   border-radius, sizing, elevation, and interaction patterns of the surrounding screens. Read 2-3
+   existing pages before designing a new one so the result is visually indistinguishable from what is
+   already there.
+4. **Reusable when shared (DRY UI).** If a piece of UI is — or will be — used in 2 or more places,
+   extract it into a single reusable component instead of copy-pasting markup. One source of truth per
+   visual element, so a future change is made once, not in N files. (UI form of §2.13)
+5. **Color discipline — use the theme, never invent colors.**
+   - **Inspect the palette first** — find where colors are defined (theme file, design tokens, CSS
+     variables, `theme.palette`, Tailwind / SCSS config) and read the actual values before styling.
+   - **Use only the theme's semantic tokens** — `primary`, `secondary`, `error`, `warning`, `success`,
+     `info`, `text.*`, `--color-*`, etc. Drive component colors through them (e.g. MUI `color="error"`,
+     `theme.palette.text.secondary`).
+   - **Never hardcode an arbitrary hex / rgb** inline, and **never introduce a new color** that is not
+     already in the palette. No "rainbow" — do not scatter several unrelated bright colors on one screen.
+   - If a shade you need does not exist, reuse the nearest existing token (or an opacity / variant of
+     it). If a genuinely new color is required, add it to the theme / token source once — never sprinkle
+     literals through components.
+   - **Established semantic conventions still win (§0)** — keep existing patterns such as a `*`
+     required-field marker or status-chip color maps that already resolve to theme colors.
+   - BAD: `style={{ color: '#3a7bd5' }}`, `background: '#ff00aa'`, a different random accent per card.
+   - GOOD: `color="error"`, `sx={{ color: 'text.secondary' }}`, `theme.palette.primary.main`,
+     `var(--text-secondary)`.
+   - Severity: **WARNING**
+6. **Translations.** All user-facing UI strings follow the i18n rule (§2.12): use `t("key")`, add new
+   keys to every language file, never hardcode labels.
+
 ---
 
 ## 3. Folder Structure

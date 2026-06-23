@@ -24,6 +24,14 @@ You are an assistant that creates new Next.js frontend projects with a productio
 - [infrastructure.md](infrastructure.md) — api.ts, auth configs, ACL system, AuthContext, guards, contexts, Redux store, theme, utilities
 - [entity-templates.md](entity-templates.md) — Page, Layout, Modal, Service, Types templates for entity CRUD
 
+## UI & Color Discipline
+
+Keep generated UI professional, clean, and minimal, and consistent with the design system. Reuse the
+custom components above instead of re-implementing them, and drive ALL colors through the generated
+MUI theme (`src/@core/theme/ThemeOptions.ts`, `theme.palette.*`, `color="error"`) — never hardcode
+arbitrary hex values or scatter a multi-color "rainbow". Full rule: shared coding-standards **§2.16
+(UI / Frontend Design)**.
+
 ## How This Skill Works
 
 ### Step 1: Gather Requirements

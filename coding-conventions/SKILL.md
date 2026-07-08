@@ -25,6 +25,14 @@ wrapper - it does not duplicate the rules.
    modify, delete, or create files that were not requested.
 3. **All output in English** - code, identifiers, comments, commit messages, logs, errors.
    No exceptions.
+4. **No hardcoded values without approval.** Never bake a literal - URL, host, port, file
+   path, credential, API key, magic number, timeout, retry count, feature limit, environment
+   name, etc. - directly into the code. Prefer a named constant, a config/settings source, or
+   an environment variable. Before introducing ANY hardcoded value, **ask the user first** -
+   even when making it configurable seems unnecessary, still ask "shall I hardcode this, or
+   make it configurable?" rather than deciding silently. If you are genuinely forced to
+   hardcode it (no config surface exists, or the user tells you to), **say so explicitly** and
+   explain why. Never drop a hardcoded value in arbitrarily, and never do it without approval.
 
 ---
 

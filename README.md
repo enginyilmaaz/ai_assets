@@ -11,9 +11,6 @@ Reusable [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skills th
 | `commit` | `/commit` | Git workflow — pull, stash, commit, push with smart conflict handling |
 | `coding-conventions` | — (auto) | Proactive coding standards — naming, SOLID, design patterns, file/line limits, stack-specific (C#/Angular/Node) |
 | `optimize` | `/optimize` | Performance optimization — O(n²)→O(n), N+1 queries, Map/Set, batching |
-| `fullstack-scaffold` | `/fullstack-scaffold` | Full-stack project (backend + frontend) in one command |
-| `nodejs-backend-scaffold` | `/nodejs-backend-scaffold` | Node.js Express backend with layered architecture |
-| `nextjs-frontend-scaffold` | `/nextjs-frontend-scaffold` | Next.js frontend with MUI, React Query, CASL ACL |
 
 ## Installation
 

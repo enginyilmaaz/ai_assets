@@ -90,9 +90,10 @@ file where its peers already live. Do NOT invent a new structure.
 - Controllers: `PaymentController.ts`
 - Routers: `PaymentRouter.ts`
 - Models: `Payment.ts`
-- Services: `PaymentService.ts`
+- Services: `PaymentService.ts` (abstract interface `IPaymentService.ts`)
 - Helpers: `PaymentHelper.ts`
 - Repositories: `PaymentRepository.ts`
+- **The file name must exactly equal the single class/type it holds** (one class per file — §2.1): `UserAuthHelper.ts` → `class UserAuthHelper`, `AdminService.ts` → `class AdminService`. The role suffix (`Controller` / `Service` / `Helper` / `Repository` / `Router`) is part of both the class name and the file name; the file lives in the matching layer folder (`src/helpers/`, `src/services/concrete/`, `src/data-access/concrete/`, …).
 
 ### 1.9 Import Names — PascalCase
 - `import { UserController } from ".."`

@@ -1,0 +1,2 @@
+## Safety — out-of-project file changes
+- Before **modifying, creating, or deleting** any file, check whether its path is **outside the current project directory** (ignore temp paths under `/tmp`). If it is out-of-project, **STOP and ask the user first** — present two options (continue / skip) instead of doing it silently. This guards against acting on a message that was meant for a different session/project.

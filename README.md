@@ -1,52 +1,42 @@
-# General AI Skills for Claude Code
+# ai_assets
 
-Reusable [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skills that work with any project. Not tied to any specific product or codebase.
+Public catalog of reusable [Claude Code](https://docs.anthropic.com/en/docs/claude-code)
+**assets** — company-agnostic, not tied to any product. Consumed by the AI tool apps as
+a single git submodule (`src/assets`). This is the **public** half; the private superset
+lives in `smartmarine/sm_ai_assets`, which embeds this repo as its `public/` submodule.
+
+## Layout
+
+```
+skills/    reusable skills (each a folder with SKILL.md); skills/hooks.json = skill-attached auto-trigger hooks
+rules/     global CLAUDE.md rules — manifest.json (catalog) + rules/<id>.md (bodies) + preamble.md
+hooks/     standalone hooks — manifest.json (catalog) + <id>/ (scripts)
+```
 
 ## Skills
 
 | Skill | Command | Description |
 |-------|---------|-------------|
-| `analyze` | `/analyze` | Read-only code audit — Big-O complexity, anti-patterns, good patterns, A-F grade |
+| `analyze` | `/analyze` | Read-only code audit — Big-O complexity, anti-patterns, good patterns, A–F grade |
 | `code-review` | `/code-review` | Coding standards review — naming conventions, practices, structure |
 | `commit` | `/commit` | Git workflow — pull, stash, commit, push with smart conflict handling |
-| `coding-conventions` | — (auto) | Proactive coding standards — naming, SOLID, design patterns, file/line limits, stack-specific (C#/Angular/Node) |
+| `coding-conventions` | — (auto) | Proactive coding standards — naming, SOLID, design patterns, file/line limits |
 | `optimize` | `/optimize` | Performance optimization — O(n²)→O(n), N+1 queries, Map/Set, batching |
 
-## Installation
+## Rules
 
-Copy the skill folders you need into `~/.claude/skills/`:
+Global instruction-file rules. `rules/manifest.json` is the catalog (`id`, `icon`,
+`order`, localized name/description); each `rules/rules/<id>.md` is one `## Heading`
+section a rules-manager app merges into `~/.claude/CLAUDE.md`.
 
-```bash
-# Clone
-git clone https://github.com/enginyilmaaz/general_ai_skills.git
-cd general_ai_skills
+## Hooks
 
-# Copy all skills
-cp -r */ ~/.claude/skills/
+Standalone Claude Code hooks. `hooks/manifest.json` is the catalog; each hook ships its
+script under `hooks/<id>/` plus the `settings.json` fragment to install. Example:
+`voice-notify` — a Stop hook that speaks the finished task's title via edge-tts.
 
-# Or copy specific skills
-cp -r analyze commit optimize ~/.claude/skills/
-```
+## Consumption
 
-## Usage
-
-Invoke skills with slash commands in Claude Code:
-
-```
-/analyze src/controllers/
-/commit commit and push
-/optimize check for N+1 queries
-```
-
-Some skills (like `coding-conventions`) auto-apply based on context.
-
-## Structure
-
-Each skill is a directory containing:
-
-```
-skill-name/
-├── SKILL.md              # Main skill definition (frontmatter + instructions)
-├── additional-file.md    # Referenced documentation (optional)
-└── ...
-```
+The AI tool apps mount this repo at `src/assets` and install assets onto the machine
+(skills → `~/.claude/skills/`, rules → `~/.claude/CLAUDE.md`, hooks → `~/.claude/hooks/`
++ `~/.claude/settings.json`). See `smartmarine_ai_app` / `ai_tools`.

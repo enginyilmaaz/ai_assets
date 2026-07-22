@@ -1,0 +1,85 @@
+{
+  "preamble": "preamble.md",
+  "rules": [
+    {
+      "id": "language",
+      "file": "rules/language.md",
+      "icon": "translate",
+      "order": 10,
+      "name_en": "Language",
+      "name_tr": "Dil",
+      "desc_en": "Always respond in Turkish by default unless asked otherwise.",
+      "desc_tr": "Aksi istenmedikçe varsayılan olarak Türkçe yanıt ver."
+    },
+    {
+      "id": "skills",
+      "file": "rules/skills.md",
+      "icon": "extension",
+      "order": 20,
+      "name_en": "Prefer skills",
+      "name_tr": "Skill'leri tercih et",
+      "desc_en": "Check for a relevant skill before any task; always commit/push via the commit skill.",
+      "desc_tr": "Her işten önce ilgili skill'i kontrol et; git commit/push'u daima commit skill'iyle yap."
+    },
+    {
+      "id": "safety",
+      "file": "rules/safety.md",
+      "icon": "security",
+      "order": 30,
+      "name_en": "Out-of-project safety",
+      "name_tr": "Proje dışı güvenlik",
+      "desc_en": "Ask first before modifying, creating or deleting files outside the current project.",
+      "desc_tr": "Proje dışındaki dosyaları değiştirmeden/oluşturmadan/silmeden önce kullanıcıya sor."
+    },
+    {
+      "id": "git-push",
+      "file": "rules/git-push.md",
+      "icon": "call_split",
+      "order": 40,
+      "name_en": "Git branch push safety",
+      "name_tr": "Git branch push güvenliği",
+      "desc_en": "Only push to dev; never push to a non-dev branch without explicit confirmation (single-branch repos exempt).",
+      "desc_tr": "Sadece dev'e push et; onay almadan non-dev branch'e push etme (tek-branch repolar hariç)."
+    },
+    {
+      "id": "local-tools",
+      "file": "rules/local-tools.md",
+      "icon": "handyman",
+      "order": 50,
+      "name_en": "Local tool installs",
+      "name_tr": "Yerel tool kurulumu",
+      "desc_en": "Install any needed tool or package into the project's tools/ folder, never system-wide; ask before deleting it at the end.",
+      "desc_tr": "Gereken tool/paketi sisteme değil projenin tools/ klasörüne kur; iş bitince silinsin mi diye sor."
+    },
+    {
+      "id": "respect-structure",
+      "file": "rules/respect-structure.md",
+      "icon": "travel_explore",
+      "order": 70,
+      "name_en": "Understand before acting",
+      "name_tr": "Önce anla, sonra hareket et",
+      "desc_en": "Map an unfamiliar system first (structure, search, related skills); stay within its folder structure and naming; reuse existing components instead of duplicating.",
+      "desc_tr": "Bilmediğin sistemi önce çıkar (yapı, arama, ilgili skill'ler); klasör yapısı ve isimlendirmenin dışına çıkma; mevcut componentleri kopyalamak yerine yeniden kullan."
+    },
+    {
+      "id": "coding-conventions",
+      "file": "rules/coding-conventions.md",
+      "icon": "rule",
+      "order": 80,
+      "name_en": "Follow coding conventions",
+      "name_tr": "Kodlama kurallarına uy",
+      "desc_en": "When writing or editing code, follow the project's coding conventions (naming, placement, style); apply the coding-conventions skill if available.",
+      "desc_tr": "Kod yazarken/düzenlerken projenin kodlama kurallarına (isimlendirme, yerleşim, stil) uy; varsa coding-conventions skill'ini uygula."
+    },
+    {
+      "id": "design-standards",
+      "file": "rules/design-standards.md",
+      "icon": "architecture",
+      "order": 90,
+      "name_en": "Full-stack, clean design",
+      "name_tr": "Full-stack, temiz tasarım",
+      "desc_en": "When you design or build, deliver both backend and frontend, keep it modular and best-practice, make it clean/modern and on-brand (match the system's colors), and use realistic, non-absurd examples.",
+      "desc_tr": "Bir şey tasarlarken/kurarken hem backend hem frontend'i teslim et, modüler ve best-practice tut; temiz/modern ve sisteme uyumlu (renklerine uygun) yap; gerçekçi, absürt olmayan örnekler kullan."
+    }
+  ]
+}

@@ -2,6 +2,11 @@
 
 All notable changes to the global rules catalog are documented here.
 
+## [1.6.0] - 2026-07-22
+
+### Added
+- Rule: `git-token-scope` (Git tokens — scoped injection, never clobber global auth) — when a task needs a token for one repo, inject it per-command (`git -c http.extraHeader=…`, or a one-off `https://<token>@github.com/…` URL) instead of `gh auth login` / `gh auth refresh`, which overwrite the machine's global GitHub credential and can silently break access to every other repo.
+
 ## [1.5.0] - 2026-07-21
 
 ### Added

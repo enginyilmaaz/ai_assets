@@ -80,6 +80,16 @@
       "name_tr": "Full-stack, temiz tasarım",
       "desc_en": "When you design or build, deliver both backend and frontend, keep it modular and best-practice, make it clean/modern and on-brand (match the system's colors), and use realistic, non-absurd examples.",
       "desc_tr": "Bir şey tasarlarken/kurarken hem backend hem frontend'i teslim et, modüler ve best-practice tut; temiz/modern ve sisteme uyumlu (renklerine uygun) yap; gerçekçi, absürt olmayan örnekler kullan."
+    },
+    {
+      "id": "git-token-scope",
+      "file": "rules/git-token-scope.md",
+      "icon": "vpn_key",
+      "order": 100,
+      "name_en": "Scoped git tokens",
+      "name_tr": "Kapsamlı git token'ı",
+      "desc_en": "When one repo needs a token, inject it per-command; never gh auth login/refresh (it clobbers global auth and breaks other repos).",
+      "desc_tr": "Tek repo için token gerektiğinde token'ı per-command enjekte et; asla gh auth login/refresh yapma (global auth'u ezer, diğer repoların erişimini bozar)."
     }
   ]
 }

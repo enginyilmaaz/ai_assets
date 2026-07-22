@@ -1,0 +1,28 @@
+{
+  "preamble": null,
+  "hooks": [
+    {
+      "id": "voice-notify",
+      "icon": "record_voice_over",
+      "order": 10,
+      "name_en": "Voice notification on task completion",
+      "name_tr": "Görev bitince sesli bildirim",
+      "desc_en": "Announce which task finished — the conversation's auto-title — aloud via edge-tts (tr-TR-AhmetNeural), with a generic \"done\" fallback. Only tool-using turns; plain chat replies stay silent.",
+      "desc_tr": "Biten görevi — konuşmanın oto-başlığını — edge-tts (tr-TR-AhmetNeural) ile sesli söyler; başlık yoksa generic \"tamamlandı\" sesine düşer. Sadece araç kullanan turlar; düz sohbet yanıtlarında susar.",
+      "event": "Stop",
+      "files": [
+        { "src": "voice-notify/notify-task-done.sh", "dest": "~/.claude/hooks/notify-task-done.sh", "chmod": "0755" }
+      ],
+      "settings": {
+        "hooks": {
+          "Stop": [
+            { "hooks": [ { "type": "command", "command": "bash ~/.claude/hooks/notify-task-done.sh", "timeout": 15, "statusMessage": "Sesli bildirim..." } ] }
+          ]
+        }
+      },
+      "dependencies": [
+        { "type": "python-venv-cli", "pip": "edge-tts", "bin": "~/.local/bin/edge-tts", "venv": "~/.local/share/edge-tts-venv" }
+      ]
+    }
+  ]
+}

@@ -90,6 +90,16 @@
       "name_tr": "Kapsamlı git token'ı",
       "desc_en": "When one repo needs a token, inject it per-command; never gh auth login/refresh (it clobbers global auth and breaks other repos).",
       "desc_tr": "Tek repo için token gerektiğinde token'ı per-command enjekte et; asla gh auth login/refresh yapma (global auth'u ezer, diğer repoların erişimini bozar)."
+    },
+    {
+      "id": "notify-summary",
+      "file": "rules/notify-summary.md",
+      "icon": "campaign",
+      "order": 110,
+      "name_en": "Task-completion voice summary",
+      "name_tr": "Görev-bitiş sesli özeti",
+      "desc_en": "At the end of every tool-using turn, write a one-line topic + task-type summary to ~/.claude/hooks/.turn-summary so the voice-notify hook can announce what was done (pairs with the voice-notify hook).",
+      "desc_tr": "Her araçlı tur sonunda ~/.claude/hooks/.turn-summary'ye konu + görev-tipi tek satır özet yaz; voice-notify hook onu seslendirir (voice-notify hook ile birlikte çalışır)."
     }
   ]
 }

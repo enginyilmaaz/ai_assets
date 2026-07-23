@@ -2,6 +2,11 @@
 
 All notable changes to the global rules catalog are documented here.
 
+## [1.7.0] - 2026-07-24
+
+### Added
+- Rule: `notify-summary` (Task-completion voice summary) — at the end of every tool-using turn, write a one-line topic + task-type summary to `~/.claude/hooks/.turn-summary`; the `voice-notify` hook speaks it (topic + type, e.g. "ERP log araştırması tamamlandı") and falls back to the conversation title if absent.
+
 ## [1.6.0] - 2026-07-22
 
 ### Added

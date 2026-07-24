@@ -7,21 +7,16 @@
       "order": 10,
       "name_en": "Voice notification on task completion",
       "name_tr": "Görev bitince sesli bildirim",
-      "desc_en": "When a tool-using turn ends, speaks a topic + task-type announcement via edge-tts (tr-TR-AhmetNeural) — Claude writes a one-line summary; falls back to the conversation title. On long tasks (>~10 min) it also gives an interim \"still working…\" update. Plain chat replies stay silent.",
-      "desc_tr": "Araç kullanan bir tur bitince edge-tts (tr-TR-AhmetNeural) ile konu + görev-tipi anonsu söyler — Claude tek satır özet yazar; yoksa konuşma başlığına düşer. Uzun tasklarda (>~10 dk) ~10 dk'da bir 'hala çalışıyor…' ara bildirimi de verir. Düz sohbet yanıtlarında susar.",
+      "desc_en": "When a tool-using turn ends, speaks a topic + task-type announcement via edge-tts (tr-TR-AhmetNeural) — Claude writes a one-line summary; falls back to the conversation title. Plain chat replies stay silent.",
+      "desc_tr": "Araç kullanan bir tur bitince edge-tts (tr-TR-AhmetNeural) ile konu + görev-tipi anonsu söyler — Claude tek satır özet yazar; yoksa konuşma başlığına düşer. Düz sohbet yanıtlarında susar.",
       "event": "Stop",
       "files": [
-        { "src": "voice-notify/notify-task-done.sh", "dest": "~/.claude/hooks/notify-task-done.sh", "chmod": "0755" },
-        { "src": "voice-notify/interim-notify.sh", "dest": "~/.claude/hooks/interim-notify.sh", "chmod": "0755" },
-        { "src": "voice-notify/interim-start.sh", "dest": "~/.claude/hooks/interim-start.sh", "chmod": "0755" }
+        { "src": "voice-notify/notify-task-done.sh", "dest": "~/.claude/hooks/notify-task-done.sh", "chmod": "0755" }
       ],
       "settings": {
         "hooks": {
           "Stop": [
             { "hooks": [ { "type": "command", "command": "bash ~/.claude/hooks/notify-task-done.sh", "timeout": 15, "statusMessage": "Sesli bildirim..." } ] }
-          ],
-          "UserPromptSubmit": [
-            { "hooks": [ { "type": "command", "command": "bash ~/.claude/hooks/interim-start.sh", "timeout": 5 } ] }
           ]
         }
       },

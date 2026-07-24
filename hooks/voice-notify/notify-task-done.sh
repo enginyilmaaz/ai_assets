@@ -5,7 +5,7 @@
 # "X debug edildi", "soru cevaplandı"); this hook speaks it and deletes it. If no
 # summary was written (Claude forgot, or a plain non-summarised turn), it falls back
 # to "«conversation auto-title» tamamlandı", and offline it falls back to a cached
-# generic clip. Also stops the long-task interim timer for this session.
+# generic clip.
 #
 # Voice: tr-TR-AhmetNeural.
 
@@ -16,25 +16,12 @@ SUMMARY="$HOOKDIR/.turn-summary"
 EDGE_TTS="$HOME/.local/bin/edge-tts"
 
 INPUT="$(cat 2>/dev/null || true)"
-META="$(printf '%s' "$INPUT" | python3 -c 'import sys, json
+TRANSCRIPT="$(printf '%s' "$INPUT" | python3 -c 'import sys, json
 try:
     d = json.load(sys.stdin)
-    print((d.get("transcript_path") or "") + "\t" + (d.get("session_id") or ""))
+    print(d.get("transcript_path") or "")
 except Exception:
-    print("\t")' 2>/dev/null || printf '\t')"
-TRANSCRIPT="${META%%$'\t'*}"
-SESSION="${META##*$'\t'}"
-
-# Turn ended → stop this session's long-task interim timer (kill the whole process
-# group, since it runs under setsid, so the sleeping child dies too).
-if [ -n "$SESSION" ]; then
-  PIDFILE="$HOOKDIR/.interim-$SESSION.pid"
-  if [ -f "$PIDFILE" ]; then
-    IPID="$(cat "$PIDFILE" 2>/dev/null)"
-    rm -f "$PIDFILE"
-    [ -n "$IPID" ] && kill -TERM "$IPID" 2>/dev/null
-  fi
-fi
+    print("")' 2>/dev/null || true)"
 
 # Gate: only announce for turns that actually used a tool.
 USED_TOOL=0

@@ -1,4 +1,2 @@
 ## Git — branch push safety
-- **Never push directly to any branch other than `dev`.** The default (and normally the only) push target is `dev`.
-- **Exception:** if a repo has only ONE branch (e.g. only `main`, no `dev`), that single branch may be pushed directly.
-- Whenever a `dev` branch exists alongside other branches, **never push to a non-dev branch directly** — first **ask the user for explicit confirmation** ("about to push to non-dev branch `<name>`, are you sure?") and wait for their answer before pushing.
+- **Always commit and push via the `commit` skill** (invoke it through the Skill tool) — never run raw `git commit` / `git push`. The commit skill is where branch-push safety lives, so there is nothing extra to remember here: `dev` is the default push target; a single-branch repo (e.g. only `main`, no `dev`) is pushed directly with no confirmation; pushing to any non-dev branch — including `main`, even when explicitly named — makes it stop and re-confirm first.

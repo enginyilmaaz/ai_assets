@@ -38,8 +38,8 @@
       "order": 40,
       "name_en": "Git branch push safety",
       "name_tr": "Git branch push güvenliği",
-      "desc_en": "Only push to dev; never push to a non-dev branch without explicit confirmation (single-branch repos exempt).",
-      "desc_tr": "Sadece dev'e push et; onay almadan non-dev branch'e push etme (tek-branch repolar hariç)."
+      "desc_en": "Always commit/push via the commit skill; it enforces branch-push safety (dev is the default target, single-branch repos push directly, non-dev pushes need re-confirmation).",
+      "desc_tr": "Commit/push'u daima commit skill'iyle yap; branch-push güvenliğini o uygular (dev varsayılan hedef, tek-branch doğrudan, non-dev push tekrar onay ister)."
     },
     {
       "id": "local-tools",

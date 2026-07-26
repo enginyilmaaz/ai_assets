@@ -3,26 +3,25 @@
   "hooks": [
     {
       "id": "voice-notify",
-      "icon": "record_voice_over",
+      "icon": "notifications_active",
       "order": 10,
-      "name_en": "Voice notification on task completion",
-      "name_tr": "Görev bitince sesli bildirim",
-      "desc_en": "When a tool-using turn ends, speaks a topic + task-type announcement via edge-tts (tr-TR-AhmetNeural) — Claude writes a one-line summary; falls back to the conversation title. Plain chat replies stay silent.",
-      "desc_tr": "Araç kullanan bir tur bitince edge-tts (tr-TR-AhmetNeural) ile konu + görev-tipi anonsu söyler — Claude tek satır özet yazar; yoksa konuşma başlığına düşer. Düz sohbet yanıtlarında susar.",
+      "name_en": "Notification sound on task completion",
+      "name_tr": "Görev bitince bildirim sesi",
+      "desc_en": "When a tool-using turn ends, plays a short notification sound (bundled notification.mp3). No text-to-speech. Plain chat replies stay silent.",
+      "desc_tr": "Araç kullanan bir tur bitince kısa bir bildirim sesi çalar (paketteki notification.mp3). Konuşma-metni okuma yok. Düz sohbet yanıtlarında susar.",
       "event": "Stop",
       "files": [
-        { "src": "voice-notify/notify-task-done.sh", "dest": "~/.claude/hooks/notify-task-done.sh", "chmod": "0755" }
+        { "src": "voice-notify/notify-task-done.sh", "dest": "~/.claude/hooks/notify-task-done.sh", "chmod": "0755" },
+        { "src": "voice-notify/notification.mp3", "dest": "~/.claude/hooks/notification.mp3", "chmod": "0644" }
       ],
       "settings": {
         "hooks": {
           "Stop": [
-            { "hooks": [ { "type": "command", "command": "bash ~/.claude/hooks/notify-task-done.sh", "timeout": 15, "statusMessage": "Sesli bildirim..." } ] }
+            { "hooks": [ { "type": "command", "command": "bash ~/.claude/hooks/notify-task-done.sh", "timeout": 15, "statusMessage": "Bildirim sesi..." } ] }
           ]
         }
       },
-      "dependencies": [
-        { "type": "python-venv-cli", "pip": "edge-tts", "bin": "~/.local/bin/edge-tts", "venv": "~/.local/share/edge-tts-venv" }
-      ]
+      "dependencies": []
     }
   ]
 }

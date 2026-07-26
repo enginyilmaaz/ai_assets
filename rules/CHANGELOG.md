@@ -2,6 +2,11 @@
 
 All notable changes to the global rules catalog are documented here.
 
+## [1.9.0] - 2026-07-26
+
+### Changed
+- Rule: `git-push` (Git branch push safety) — simplified to "always commit/push via the commit skill." The detailed branch-push logic (dev is the default target, single-branch repos push directly, non-dev pushes re-confirmed even when explicitly named) now lives in the `commit` skill.
+
 ## [1.8.0] - 2026-07-26
 
 ### Removed

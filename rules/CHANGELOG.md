@@ -2,6 +2,11 @@
 
 All notable changes to the global rules catalog are documented here.
 
+## [1.8.0] - 2026-07-26
+
+### Removed
+- Rule: `notify-summary` — retired. The `voice-notify` hook now plays a fixed notification sound (`notification.mp3`) instead of edge-tts, so there is no per-turn `.turn-summary` to write; the CLAUDE.md "Notifications" section was simplified to match.
+
 ## [1.7.0] - 2026-07-24
 
 ### Added

@@ -6,7 +6,7 @@
       "hooks": [
         {
           "type": "command",
-          "command": "jq -r 'if (.prompt // \"\" | test(\"\\\\bcommit\\\\b|\\\\bpush\\\\b|commit and push\"; \"i\")) then {\"hookSpecificOutput\": {\"hookEventName\": \"UserPromptSubmit\", \"additionalContext\": \"IMPORTANT: The user wants to commit/push. You MUST invoke the commit skill using the Skill tool BEFORE doing anything else.\"}} else empty end'",
+          "command": "node -e 'let s=\"\";process.stdin.on(\"data\",c=>s+=c).on(\"end\",()=>{try{var p=String(JSON.parse(s||\"{}\").prompt||\"\");if(new RegExp(\"\\\\bcommit\\\\b|\\\\bpush\\\\b|commit and push\",\"i\").test(p))process.stdout.write(JSON.stringify({hookSpecificOutput:{hookEventName:\"UserPromptSubmit\",additionalContext:\"IMPORTANT: The user wants to commit/push. You MUST invoke the commit skill using the Skill tool BEFORE doing anything else.\"}}));}catch(e){}})'",
           "timeout": 5,
           "statusMessage": "Checking for commit/push references..."
         }
@@ -18,7 +18,7 @@
       "hooks": [
         {
           "type": "command",
-          "command": "jq -r 'if (.prompt // \"\" | test(\"analyze this|analyze code|analyze the code|code audit|performance analysis|complexity analysis\"; \"i\")) then {\"hookSpecificOutput\": {\"hookEventName\": \"UserPromptSubmit\", \"additionalContext\": \"IMPORTANT: The user wants code analysis. You MUST invoke the analyze skill using the Skill tool BEFORE doing anything else.\"}} else empty end'",
+          "command": "node -e 'let s=\"\";process.stdin.on(\"data\",c=>s+=c).on(\"end\",()=>{try{var p=String(JSON.parse(s||\"{}\").prompt||\"\");if(new RegExp(\"analyze this|analyze code|analyze the code|code audit|performance analysis|complexity analysis\",\"i\").test(p))process.stdout.write(JSON.stringify({hookSpecificOutput:{hookEventName:\"UserPromptSubmit\",additionalContext:\"IMPORTANT: The user wants code analysis. You MUST invoke the analyze skill using the Skill tool BEFORE doing anything else.\"}}));}catch(e){}})'",
           "timeout": 5,
           "statusMessage": "Checking for analyze references..."
         }
@@ -30,7 +30,7 @@
       "hooks": [
         {
           "type": "command",
-          "command": "jq -r 'if (.prompt // \"\" | test(\"optimize this|optimize code|optimize the code|reduce complexity|improve performance\"; \"i\")) then {\"hookSpecificOutput\": {\"hookEventName\": \"UserPromptSubmit\", \"additionalContext\": \"IMPORTANT: The user wants code optimization. You MUST invoke the optimize skill using the Skill tool BEFORE doing anything else.\"}} else empty end'",
+          "command": "node -e 'let s=\"\";process.stdin.on(\"data\",c=>s+=c).on(\"end\",()=>{try{var p=String(JSON.parse(s||\"{}\").prompt||\"\");if(new RegExp(\"optimize this|optimize code|optimize the code|reduce complexity|improve performance\",\"i\").test(p))process.stdout.write(JSON.stringify({hookSpecificOutput:{hookEventName:\"UserPromptSubmit\",additionalContext:\"IMPORTANT: The user wants code optimization. You MUST invoke the optimize skill using the Skill tool BEFORE doing anything else.\"}}));}catch(e){}})'",
           "timeout": 5,
           "statusMessage": "Checking for optimize references..."
         }
@@ -42,7 +42,7 @@
       "hooks": [
         {
           "type": "command",
-          "command": "jq -r 'if (.prompt // \"\" | test(\"code review|review my code|review this code|review the code\"; \"i\")) then {\"hookSpecificOutput\": {\"hookEventName\": \"UserPromptSubmit\", \"additionalContext\": \"IMPORTANT: The user wants a code review. You MUST invoke the code-review skill using the Skill tool BEFORE doing anything else.\"}} else empty end'",
+          "command": "node -e 'let s=\"\";process.stdin.on(\"data\",c=>s+=c).on(\"end\",()=>{try{var p=String(JSON.parse(s||\"{}\").prompt||\"\");if(new RegExp(\"code review|review my code|review this code|review the code\",\"i\").test(p))process.stdout.write(JSON.stringify({hookSpecificOutput:{hookEventName:\"UserPromptSubmit\",additionalContext:\"IMPORTANT: The user wants a code review. You MUST invoke the code-review skill using the Skill tool BEFORE doing anything else.\"}}));}catch(e){}})'",
           "timeout": 5,
           "statusMessage": "Checking for code review references..."
         }

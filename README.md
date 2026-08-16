@@ -38,6 +38,6 @@ script under `hooks/<id>/` plus the `settings.json` fragment to install. Example
 
 ## Consumption
 
-The AI tool apps mount this repo at `src/assets` and install assets onto the machine
+The AI tool app mounts this repo at `src/assets` and install assets onto the machine
 (skills → `~/.claude/skills/`, rules → `~/.claude/CLAUDE.md`, hooks → `~/.claude/hooks/`
-+ `~/.claude/settings.json`). See `smartmarine_ai_app` / `ai_tools`.
++ `~/.claude/settings.json`). See `smartmarine_ai_app`.

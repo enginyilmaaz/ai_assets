@@ -30,6 +30,14 @@ For detailed pattern definitions see: [analysis-patterns.md](analysis-patterns.m
 - If `$ARGUMENTS` specifies a file → analyze that file
 - If `$ARGUMENTS` specifies a folder → scan all source files (`.ts`, `.js`, `.tsx`, `.jsx`, `.py`, `.go`, `.java`, `.cs`) in that folder
 - If `$ARGUMENTS` is empty → analyze the currently open file, or if none, analyze `src/` of the current project
+- If `$ARGUMENTS` names a target that **cannot be found on disk** (no such file or folder), do NOT fail. Fall back to listing the skills currently installed on disk — each `~/.claude/skills/*/` folder with its one-line `description` from `SKILL.md` frontmatter — as a table, then ask which skill (or a corrected path) to analyze:
+  ```bash
+  for d in ~/.claude/skills/*/; do
+    name=$(basename "$d")
+    desc=$(sed -n 's/^description:[[:space:]]*//p' "$d/SKILL.md" 2>/dev/null | head -1)
+    printf '%-28s %s\n' "$name" "${desc:-—}"
+  done
+  ```
 - For large scopes (10+ files), use the Agent tool with multiple parallel agents to speed up analysis
 
 ### Step 2 — Analyze Every Function/Method

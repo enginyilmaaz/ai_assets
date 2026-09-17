@@ -82,6 +82,26 @@
       "desc_tr": "Bir şey tasarlarken/kurarken hem backend hem frontend'i teslim et, modüler ve best-practice tut; temiz/modern ve sisteme uyumlu (renklerine uygun) yap; gerçekçi, absürt olmayan örnekler kullan."
     },
     {
+      "id": "form-inputs",
+      "file": "rules/form-inputs.md",
+      "icon": "input",
+      "order": 92,
+      "name_en": "Form inputs: errors only",
+      "name_tr": "Form input'ları: sadece hata",
+      "desc_en": "No helper/hint text under inputs and no long placeholder explanations; only the validation error, and only while the field is in error.",
+      "desc_tr": "Input altına açıklama/ipucu yazma, placeholder'a uzun açıklama koyma; altta yalnızca hata durumunda doğrulama mesajı olsun."
+    },
+    {
+      "id": "alternative-designs",
+      "file": "rules/alternative-designs.md",
+      "icon": "palette",
+      "order": 94,
+      "name_en": "Live alternative designs",
+      "name_tr": "Canlı alternatif tasarımlar",
+      "desc_en": "Show alternative designs live on localhost via the Superpowers visual companion: at least 5 distinct styles, built step by step, every screen and collapsed content visible.",
+      "desc_tr": "Alternatif tasarımları Superpowers görsel companion'ı ile localhost'ta canlı göster: en az 5 farklı stil, adım adım; tüm ekranlar ve kapalı içerikler görünsün."
+    },
+    {
       "id": "git-token-scope",
       "file": "rules/git-token-scope.md",
       "icon": "vpn_key",
@@ -90,6 +110,16 @@
       "name_tr": "Kapsamlı git token'ı",
       "desc_en": "When one repo needs a token, inject it per-command; never gh auth login/refresh (it clobbers global auth and breaks other repos).",
       "desc_tr": "Tek repo için token gerektiğinde token'ı per-command enjekte et; asla gh auth login/refresh yapma (global auth'u ezer, diğer repoların erişimini bozar)."
+    },
+    {
+      "id": "artifact-approval",
+      "file": "rules/artifact-approval.md",
+      "icon": "approval",
+      "order": 110,
+      "name_en": "Artifacts need approval",
+      "name_tr": "Artifact için onay",
+      "desc_en": "Never create, publish or update an Artifact without asking first and getting explicit approval.",
+      "desc_tr": "Sormadan ve açık onay almadan asla Artifact oluşturma, yayınlama veya güncelleme."
     }
   ]
 }

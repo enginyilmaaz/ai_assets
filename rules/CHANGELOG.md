@@ -2,6 +2,13 @@
 
 All notable changes to the global rules catalog are documented here.
 
+## [1.10.0] - 2026-09-17
+
+### Added
+- Rule: `form-inputs` (Form inputs — errors only under an input) — no helper/hint/description text under inputs and no long placeholder explanations; the space under an input shows only the field's validation error, and only while the field is in error.
+- Rule: `alternative-designs` (Alternative designs — show them live, step by step) — present alternative designs live on localhost via the Superpowers brainstorming visual companion: at least 5 genuinely different styles, built step by step like in Figma, with every screen and every collapsed element's content shown.
+- Rule: `artifact-approval` (Artifacts — never create one without approval) — never create, publish or update an Artifact without asking first and getting explicit approval; until then, deliver in the terminal or as a local file.
+
 ## [1.9.0] - 2026-07-26
 
 ### Changed

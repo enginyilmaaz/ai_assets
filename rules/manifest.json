@@ -102,6 +102,16 @@
       "desc_tr": "Alternatif tasarımları Superpowers görsel companion'ı ile localhost'ta canlı göster: en az 5 farklı stil, adım adım; tüm ekranlar ve kapalı içerikler görünsün."
     },
     {
+      "id": "package-manager",
+      "file": "rules/package-manager.md",
+      "icon": "inventory_2",
+      "order": 96,
+      "name_en": "Match the package manager",
+      "name_tr": "Paket yöneticisine uy",
+      "desc_en": "Detect the package manager the project already uses and stay on it; never run npm in a yarn/pnpm/bun project or leave a second lockfile behind. Applies to every language.",
+      "desc_tr": "Projenin kullandığı paket yöneticisini tespit et ve ondan şaşma; yarn/pnpm/bun projesinde asla npm çalıştırma, ikinci bir lock dosyası bırakma. Her dil için geçerli."
+    },
+    {
       "id": "git-token-scope",
       "file": "rules/git-token-scope.md",
       "icon": "vpn_key",

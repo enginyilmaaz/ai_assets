@@ -2,6 +2,11 @@
 
 All notable changes to the global rules catalog are documented here.
 
+## [1.11.0] - 2026-09-27
+
+### Added
+- Rule: `package-manager` (Package manager — match the project, never mix) — detect the package manager a project already uses from its lockfile / `packageManager` field / CI commands and stay on it; never run `npm` in a yarn, pnpm or bun project, never leave a second foreign lockfile (e.g. a `package-lock.json` next to `yarn.lock`), and ask when a project has nothing to go by. Applies to every ecosystem, not just Node.
+
 ## [1.10.0] - 2026-09-17
 
 ### Added

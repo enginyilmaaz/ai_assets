@@ -112,6 +112,26 @@
       "desc_tr": "Projenin kullandığı paket yöneticisini tespit et ve ondan şaşma; yarn/pnpm/bun projesinde asla npm çalıştırma, ikinci bir lock dosyası bırakma. Her dil için geçerli."
     },
     {
+      "id": "spec-files",
+      "file": "rules/spec-files.md",
+      "icon": "description",
+      "order": 97,
+      "name_en": "Specs: ask where, delete when done",
+      "name_tr": "Spec: nereye sor, bitince sil",
+      "desc_en": "Before writing a spec or plan, ask whether it goes in the temporary folder or the repo (repo is the default), and delete it once the work it describes is completely finished — including from the repo, as a cleanup commit.",
+      "desc_tr": "Spec veya plan yazmadan önce geçici klasöre mi repoya mı yazılacağını sor (varsayılan repo), ve anlattığı iş tamamen bitince dosyayı sil — repodaysa ayrı bir temizlik commit'i olarak."
+    },
+    {
+      "id": "test-artifacts",
+      "file": "rules/test-artifacts.md",
+      "icon": "cleaning_services",
+      "order": 98,
+      "name_en": "Clean up test artifacts",
+      "name_tr": "Test çıktılarını temizle",
+      "desc_en": "After a Playwright or equivalent test run, automatically delete what it produced — test-results, reports, traces, videos, screenshots — and stop the processes and browsers you started, even when the run failed or was cancelled.",
+      "desc_tr": "Playwright veya benzeri bir test koşusundan sonra ürettiği her şeyi otomatik sil — test-results, rapor, trace, video, ekran görüntüleri — ve başlattığın süreçleri/tarayıcıları kapat; koşu başarısız olsa veya iptal edilse bile."
+    },
+    {
       "id": "git-token-scope",
       "file": "rules/git-token-scope.md",
       "icon": "vpn_key",

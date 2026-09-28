@@ -57,6 +57,13 @@ wrapper - it does not duplicate the rules.
 7. **Comment the non-obvious.** Self-explanatory code needs no comments; when logic is
    non-trivial (algorithm, business rule, workaround, non-obvious "why"), add a short English
    comment on the WHY. (§2.5)
+8. **Spec / plan documents: ask where, then clean up.** Before writing a spec, plan or design
+   document for the work, ASK whether it goes in the session's temporary folder or in the
+   project repo - offer **repo as the pre-selected default**. A spec is scaffolding, not a
+   deliverable: once the work it describes is completely finished (implemented, verified,
+   committed), **delete it wherever it was written**, including from the repo as a separate
+   cleanup commit. Never leave a stale spec behind for finished work; if the task is only
+   partly done, keep the spec and say what is left.
 
 ---
 

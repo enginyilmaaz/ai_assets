@@ -2,6 +2,12 @@
 
 All notable changes to the global rules catalog are documented here.
 
+## [1.12.0] - 2026-09-28
+
+### Added
+- Rule: `spec-files` (Specs — ask where they live, delete them when the work is done) — before writing a spec / plan / design document, ask whether it belongs in the session's temporary folder or in the project repo, with **repo as the pre-selected default**; once the work it describes is completely finished, delete the spec wherever it was written, including from the repo as a separate cleanup commit, and never leave a stale spec behind for finished work.
+- Rule: `test-artifacts` (Test artifacts — clean up whatever a test run leaves behind) — after any Playwright or equivalent test run, automatically delete `test-results/`, `playwright-report/`, traces, videos, screenshots, `.last-run.json` and temp copies even when the run failed or was cancelled; also kill the background test / report-server processes and close every browser session, keeping an artifact only when it was asked for or IS the deliverable.
+
 ## [1.11.0] - 2026-09-27
 
 ### Added

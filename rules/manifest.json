@@ -98,8 +98,8 @@
       "order": 94,
       "name_en": "Live alternative designs",
       "name_tr": "Canlı alternatif tasarımlar",
-      "desc_en": "Show alternative designs live on localhost via the Superpowers visual companion: at least 5 distinct styles, built step by step, every screen and collapsed content visible.",
-      "desc_tr": "Alternatif tasarımları Superpowers görsel companion'ı ile localhost'ta canlı göster: en az 5 farklı stil, adım adım; tüm ekranlar ve kapalı içerikler görünsün."
+      "desc_en": "Show alternative designs live via the Superpowers visual companion, built on the real product — its theme, logo and screens (browse it if it runs locally); 5+ distinct directions, step by step, nothing hidden.",
+      "desc_tr": "Alternatif tasarımları Superpowers görsel companion'ı ile canlı göster; gerçek ürünün teması, logosu ve ekranları üzerine kur (lokalde açıksa gez) — en az 5 farklı yön, adım adım, hiçbir şey gizli kalmasın."
     },
     {
       "id": "package-manager",

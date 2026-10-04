@@ -2,6 +2,11 @@
 
 All notable changes to the global rules catalog are documented here.
 
+## [1.13.0] - 2026-10-04
+
+### Changed
+- Rule: `alternative-designs` — alternatives are now grounded in the real product instead of a made-up pseudo UI: study its theme, components and screens from the codebase, browse the running app when it is up locally (ask before starting it), take the logo and brand assets from the project itself (never invent them), and render every option inside the product's real shell. The 5+ alternatives vary layout, hierarchy, interaction and density within the product's visual identity unless a new direction is requested. The heading is unchanged, so re-adding the rule replaces an installed copy in place.
+
 ## [1.12.0] - 2026-09-28
 
 ### Added

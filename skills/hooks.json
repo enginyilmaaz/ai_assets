@@ -6,7 +6,11 @@
       "hooks": [
         {
           "type": "command",
-          "command": "node -e 'let s=\"\";process.stdin.on(\"data\",c=>s+=c).on(\"end\",()=>{try{var p=String(JSON.parse(s||\"{}\").prompt||\"\");if(new RegExp(\"\\\\bcommit\\\\b|\\\\bpush\\\\b|commit and push\",\"i\").test(p))process.stdout.write(JSON.stringify({hookSpecificOutput:{hookEventName:\"UserPromptSubmit\",additionalContext:\"IMPORTANT: The user wants to commit/push. You MUST invoke the commit skill using the Skill tool BEFORE doing anything else.\"}}));}catch(e){}})'",
+          "command": "node",
+          "args": [
+            "-e",
+            "let s='';process.stdin.on('data',c=>s+=c).on('end',()=>{try{var p=String(JSON.parse(s||'{}').prompt||'');if(new RegExp('\\\\bcommit\\\\b|\\\\bpush\\\\b|commit and push','i').test(p))process.stdout.write(JSON.stringify({hookSpecificOutput:{hookEventName:'UserPromptSubmit',additionalContext:'IMPORTANT: The user wants to commit/push. You MUST invoke the commit skill using the Skill tool BEFORE doing anything else.'}}));}catch(e){}})"
+          ],
           "timeout": 5,
           "statusMessage": "Checking for commit/push references..."
         }
@@ -18,7 +22,11 @@
       "hooks": [
         {
           "type": "command",
-          "command": "node -e 'let s=\"\";process.stdin.on(\"data\",c=>s+=c).on(\"end\",()=>{try{var p=String(JSON.parse(s||\"{}\").prompt||\"\");if(new RegExp(\"analyze this|analyze code|analyze the code|code audit|performance analysis|complexity analysis\",\"i\").test(p))process.stdout.write(JSON.stringify({hookSpecificOutput:{hookEventName:\"UserPromptSubmit\",additionalContext:\"IMPORTANT: The user wants code analysis. You MUST invoke the analyze skill using the Skill tool BEFORE doing anything else.\"}}));}catch(e){}})'",
+          "command": "node",
+          "args": [
+            "-e",
+            "let s='';process.stdin.on('data',c=>s+=c).on('end',()=>{try{var p=String(JSON.parse(s||'{}').prompt||'');if(new RegExp('analyze this|analyze code|analyze the code|code audit|performance analysis|complexity analysis','i').test(p))process.stdout.write(JSON.stringify({hookSpecificOutput:{hookEventName:'UserPromptSubmit',additionalContext:'IMPORTANT: The user wants code analysis. You MUST invoke the analyze skill using the Skill tool BEFORE doing anything else.'}}));}catch(e){}})"
+          ],
           "timeout": 5,
           "statusMessage": "Checking for analyze references..."
         }
@@ -30,7 +38,11 @@
       "hooks": [
         {
           "type": "command",
-          "command": "node -e 'let s=\"\";process.stdin.on(\"data\",c=>s+=c).on(\"end\",()=>{try{var p=String(JSON.parse(s||\"{}\").prompt||\"\");if(new RegExp(\"optimize this|optimize code|optimize the code|reduce complexity|improve performance\",\"i\").test(p))process.stdout.write(JSON.stringify({hookSpecificOutput:{hookEventName:\"UserPromptSubmit\",additionalContext:\"IMPORTANT: The user wants code optimization. You MUST invoke the optimize skill using the Skill tool BEFORE doing anything else.\"}}));}catch(e){}})'",
+          "command": "node",
+          "args": [
+            "-e",
+            "let s='';process.stdin.on('data',c=>s+=c).on('end',()=>{try{var p=String(JSON.parse(s||'{}').prompt||'');if(new RegExp('optimize this|optimize code|optimize the code|reduce complexity|improve performance','i').test(p))process.stdout.write(JSON.stringify({hookSpecificOutput:{hookEventName:'UserPromptSubmit',additionalContext:'IMPORTANT: The user wants code optimization. You MUST invoke the optimize skill using the Skill tool BEFORE doing anything else.'}}));}catch(e){}})"
+          ],
           "timeout": 5,
           "statusMessage": "Checking for optimize references..."
         }
@@ -42,7 +54,11 @@
       "hooks": [
         {
           "type": "command",
-          "command": "node -e 'let s=\"\";process.stdin.on(\"data\",c=>s+=c).on(\"end\",()=>{try{var p=String(JSON.parse(s||\"{}\").prompt||\"\");if(new RegExp(\"code review|review my code|review this code|review the code\",\"i\").test(p))process.stdout.write(JSON.stringify({hookSpecificOutput:{hookEventName:\"UserPromptSubmit\",additionalContext:\"IMPORTANT: The user wants a code review. You MUST invoke the code-review skill using the Skill tool BEFORE doing anything else.\"}}));}catch(e){}})'",
+          "command": "node",
+          "args": [
+            "-e",
+            "let s='';process.stdin.on('data',c=>s+=c).on('end',()=>{try{var p=String(JSON.parse(s||'{}').prompt||'');if(new RegExp('code review|review my code|review this code|review the code','i').test(p))process.stdout.write(JSON.stringify({hookSpecificOutput:{hookEventName:'UserPromptSubmit',additionalContext:'IMPORTANT: The user wants a code review. You MUST invoke the code-review skill using the Skill tool BEFORE doing anything else.'}}));}catch(e){}})"
+          ],
           "timeout": 5,
           "statusMessage": "Checking for code review references..."
         }
@@ -54,7 +70,11 @@
       "hooks": [
         {
           "type": "command",
-          "command": "node -e 'let s=\"\";process.stdin.on(\"data\",c=>s+=c).on(\"end\",()=>{try{var p=String(JSON.parse(s||\"{}\").prompt||\"\");if(new RegExp(\"landing page|landing sayfa|portfolyo|portfolio site|tan.t.m sayfas|tan.t.m sitesi|web sitesi yap|web sitesi tasarla|anasayfa tasarla|hero section|marketing site\",\"i\").test(p))process.stdout.write(JSON.stringify({hookSpecificOutput:{hookEventName:\"UserPromptSubmit\",additionalContext:\"IMPORTANT: The user wants a landing page, portfolio or marketing site. You MUST invoke the design-taste-frontend skill using the Skill tool BEFORE doing anything else. It does not apply to the admin pages of an existing product base - use that product own frontend skill there.\"}}));}catch(e){}})'",
+          "command": "node",
+          "args": [
+            "-e",
+            "let s='';process.stdin.on('data',c=>s+=c).on('end',()=>{try{var p=String(JSON.parse(s||'{}').prompt||'');if(new RegExp('landing page|landing sayfa|portfolyo|portfolio site|tan.t.m sayfas|tan.t.m sitesi|web sitesi yap|web sitesi tasarla|anasayfa tasarla|hero section|marketing site','i').test(p))process.stdout.write(JSON.stringify({hookSpecificOutput:{hookEventName:'UserPromptSubmit',additionalContext:'IMPORTANT: The user wants a landing page, portfolio or marketing site. You MUST invoke the design-taste-frontend skill using the Skill tool BEFORE doing anything else. It does not apply to the admin pages of an existing product base - use that product own frontend skill there.'}}));}catch(e){}})"
+          ],
           "timeout": 5,
           "statusMessage": "Checking for landing page references..."
         }
@@ -66,7 +86,11 @@
       "hooks": [
         {
           "type": "command",
-          "command": "node -e 'let s=\"\";process.stdin.on(\"data\",c=>s+=c).on(\"end\",()=>{try{var p=String(JSON.parse(s||\"{}\").prompt||\"\");if(new RegExp(\"security audit|audit this codebase|security review|find vulnerab|vulnerability hunt|vulnerability research|pen.?test|g.venlik denetim|g.venlik incelem|zafiyet\",\"i\").test(p))process.stdout.write(JSON.stringify({hookSpecificOutput:{hookEventName:\"UserPromptSubmit\",additionalContext:\"IMPORTANT: The user wants a security audit or vulnerability review. You MUST invoke the security-audit skill using the Skill tool BEFORE doing anything else.\"}}));}catch(e){}})'",
+          "command": "node",
+          "args": [
+            "-e",
+            "let s='';process.stdin.on('data',c=>s+=c).on('end',()=>{try{var p=String(JSON.parse(s||'{}').prompt||'');if(new RegExp('security audit|audit this codebase|security review|find vulnerab|vulnerability hunt|vulnerability research|pen.?test|g.venlik denetim|g.venlik incelem|zafiyet','i').test(p))process.stdout.write(JSON.stringify({hookSpecificOutput:{hookEventName:'UserPromptSubmit',additionalContext:'IMPORTANT: The user wants a security audit or vulnerability review. You MUST invoke the security-audit skill using the Skill tool BEFORE doing anything else.'}}));}catch(e){}})"
+          ],
           "timeout": 5,
           "statusMessage": "Checking for security audit references..."
         }

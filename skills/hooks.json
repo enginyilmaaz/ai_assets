@@ -47,6 +47,30 @@
           "statusMessage": "Checking for code review references..."
         }
       ]
+    },
+    {
+      "code": "GEN_HOOK_DESIGN_TASTE",
+      "description": "Auto-trigger design-taste-frontend when a landing page, portfolio or marketing site is requested",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "node -e 'let s=\"\";process.stdin.on(\"data\",c=>s+=c).on(\"end\",()=>{try{var p=String(JSON.parse(s||\"{}\").prompt||\"\");if(new RegExp(\"landing page|landing sayfa|portfolyo|portfolio site|tan.t.m sayfas|tan.t.m sitesi|web sitesi yap|web sitesi tasarla|anasayfa tasarla|hero section|marketing site\",\"i\").test(p))process.stdout.write(JSON.stringify({hookSpecificOutput:{hookEventName:\"UserPromptSubmit\",additionalContext:\"IMPORTANT: The user wants a landing page, portfolio or marketing site. You MUST invoke the design-taste-frontend skill using the Skill tool BEFORE doing anything else. It does not apply to the admin pages of an existing product base - use that product own frontend skill there.\"}}));}catch(e){}})'",
+          "timeout": 5,
+          "statusMessage": "Checking for landing page references..."
+        }
+      ]
+    },
+    {
+      "code": "GEN_HOOK_SECURITY_AUDIT",
+      "description": "Auto-trigger security-audit when a security audit or vulnerability hunt is requested",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "node -e 'let s=\"\";process.stdin.on(\"data\",c=>s+=c).on(\"end\",()=>{try{var p=String(JSON.parse(s||\"{}\").prompt||\"\");if(new RegExp(\"security audit|audit this codebase|security review|find vulnerab|vulnerability hunt|vulnerability research|pen.?test|g.venlik denetim|g.venlik incelem|zafiyet\",\"i\").test(p))process.stdout.write(JSON.stringify({hookSpecificOutput:{hookEventName:\"UserPromptSubmit\",additionalContext:\"IMPORTANT: The user wants a security audit or vulnerability review. You MUST invoke the security-audit skill using the Skill tool BEFORE doing anything else.\"}}));}catch(e){}})'",
+          "timeout": 5,
+          "statusMessage": "Checking for security audit references..."
+        }
+      ]
     }
   ]
 }

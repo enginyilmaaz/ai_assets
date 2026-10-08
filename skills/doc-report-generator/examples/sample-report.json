@@ -1,0 +1,67 @@
+{
+  "labels": {
+    "figure": "Figure",
+    "table": "Table",
+    "contents": "CONTENTS",
+    "figures": "LIST OF FIGURES",
+    "tables": "LIST OF TABLES",
+    "references": "REFERENCES"
+  },
+  "meta": {
+    "organisation": "SEALINK TECHNOLOGY B.V.",
+    "title": "SAMPLE TECHNICAL REPORT",
+    "subtitle": "Demonstrating the writing-guide layout",
+    "author": "Prepared by the Documentation Team",
+    "document_number": "DOC-SAMPLE-001 · Rev. A",
+    "date": "October 2026"
+  },
+  "front_sections": [
+    {
+      "heading": "ABSTRACT",
+      "paragraphs": [
+        "This sample shows what the generator produces: a cover page, automatic contents and figure/table lists, numbered headings down to the fourth level, numbered captions, and an APA reference list.",
+        "Every measurement comes from the template's own styles, so the output matches the writing guide without any value being repeated here."
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "level": 1,
+      "heading": "INTRODUCTION",
+      "content": [
+        "A first-level heading always starts a new page, is set in capitals at 14 pt bold, and is followed by body text at 12 pt with 1.5 line spacing.",
+        "Paragraphs are not indented; the guide asks for 6 pt of space before and after each one instead, and no blank line between them."
+      ]
+    },
+    {
+      "level": 2,
+      "heading": "SCOPE",
+      "content": [
+        "Second-level headings are capitals at 12 pt bold, with 24 pt before and 12 pt after.",
+        { "list": ["First item of an unnumbered list.", "Second item.", "Third item."] }
+      ]
+    },
+    {
+      "level": 3,
+      "heading": "Figures and Tables",
+      "content": [
+        "A figure is centred and its caption sits underneath it; a table caption sits above the table. Both are numbered by chapter.",
+        { "figure": { "number": "1.1", "caption": "Sample figure placed by the generator.", "image": "FIGURE_PLACEHOLDER", "width_cm": 8 } },
+        { "table": { "number": "1.1", "caption": "Sample table with a header row.", "rows": [["Parameter", "Value", "Unit"], ["Supply voltage", "12 – 24", "V DC"], ["Operating temperature", "-15 – +55", "°C"]], "width_cm": 14 } }
+      ]
+    },
+    {
+      "level": 4,
+      "heading": "Fourth Level Heading",
+      "content": [
+        "Fourth- to sixth-level headings are title case, 12 pt, italic, with 6 pt before and after.",
+        "In-text citations follow APA: a single author (Demirel, 2004: 130), two authors (Gültekin and Satterfield, 1995: 391-394), and more than two (Babakuş et al., 1996: 33-46)."
+      ]
+    }
+  ],
+  "references": [
+    "Demirel, Ö. (2004). Kuramdan Uygulamaya Eğitimde Program Geliştirme (7th ed.). Ankara: Pegem A Yayıncılık.",
+    "Babakuş, E., Cravens, D. W., Johnston, M. and Moncrief, W. C. (1996). Examining the role of organizational variables in the salesperson job satisfaction model. Journal of Personal Selling and Sales Management, 16(3), 33-46.",
+    "Gültekin, N. and Satterfield, M. (1995). Rate of return on investment. Journal of Finance, 50(2), 391-394."
+  ]
+}

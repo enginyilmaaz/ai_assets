@@ -22,6 +22,7 @@ hooks/     standalone hooks — manifest.json (catalog) + <id>/ (scripts)
 | `commit` | `/commit` | Git workflow — pull, stash, commit, push with smart conflict handling |
 | `coding-conventions` | — (auto) | Proactive coding standards — naming, SOLID, design patterns, file/line limits |
 | `devam` | `/devam` | Resume an earlier Claude Code session — list past sessions (title · last activity · project) and continue where you left off |
+| `doc-report-generator` | `/doc-report-generator` | Formal Word report from a JSON spec — writing-guide layout, APA references, verify + render to PDF |
 | `optimize` | `/optimize` | Performance optimization — O(n²)→O(n), N+1 queries, Map/Set, batching |
 
 ## Rules

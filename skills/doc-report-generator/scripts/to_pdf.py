@@ -1,17 +1,35 @@
 #!/usr/bin/env python3
-"""Render a .docx to PDF with LibreOffice, with the fields actually updated.
+"""Render a .docx to PDF, with the fields actually updated.
 
-`soffice --convert-to pdf` does not refresh fields, so a generated contents list or
-list of figures comes out holding its placeholder line. Driving LibreOffice through
-UNO instead makes it possible to refresh the fields and update every index before
-the export, which is what a reader expects to see.
+Copied, as is, from the sibling doc-report-generator skill: the problem is the same
+one (a PAGE / NUMPAGES field that `soffice --convert-to` leaves on its placeholder)
+and the fix does not change with the document it is applied to. Keep the two copies
+in step if either is corrected.
+
+The engines, best first:
+
+  * WordCraft — `wordcraft-cli run` refreshes the fields and the contents lists
+    (`references.updateFields`, `references.updateToc`) and exports the PDF
+    (`file.exportPdf`) in one pass; no extra packages needed.
+  * LibreOffice through UNO — `soffice --convert-to pdf` alone does not refresh
+    fields, so a generated contents list or list of figures comes out holding its
+    placeholder line; driving the office through UNO makes it possible to refresh
+    the fields and update every index before the export.
+  * plain `soffice --convert-to` — last resort when python3-uno is missing too:
+    the conversion still works, but the fields keep their placeholder text.
+
+The engines paginate DIFFERENTLY (the sample manual: 66 pages in LibreOffice,
+59 in WordCraft), so measure the finished pages — and `pdffonts` them — with
+whichever engine rendered them.
 
     python3 to_pdf.py report.docx [-o out.pdf] [--images outdir]
 
-Needs LibreOffice with python3-uno (Debian/Ubuntu: libreoffice-writer python3-uno).
+Needs WordCraft (wordcraft-cli), or LibreOffice with python3-uno
+(Debian/Ubuntu: libreoffice-writer python3-uno).
 """
 
 import argparse
+import json
 import os
 import shutil
 import subprocess
@@ -19,7 +37,7 @@ import sys
 import time
 import uuid
 
-PORT = 2103  # unlikely to collide with a desktop LibreOffice
+PORT = 2104  # unlikely to collide with a desktop LibreOffice or the sibling skill
 
 
 def _uno():
@@ -31,10 +49,34 @@ def _uno():
         return False
 
 
+def wordcraft_convert(docx, pdf):
+    """WordCraft refreshes the fields and the contents lists, then exports the PDF."""
+    cli = shutil.which('wordcraft-cli')
+    if not cli:
+        return False
+    export = 'file.exportPdf=' + json.dumps({'path': os.path.abspath(pdf)})
+    try:
+        r = subprocess.run(
+            [cli, 'run', '--file', os.path.abspath(docx),
+             '--cmd', 'references.updateFields={}',
+             '--cmd', 'references.updateToc={}',
+             '--cmd', export],
+            capture_output=True, text=True, timeout=300)
+    except subprocess.TimeoutExpired:
+        print('wordcraft-cli timed out; falling back to LibreOffice', file=sys.stderr)
+        return False
+    if r.returncode != 0 or not os.path.isfile(pdf):
+        detail = (r.stderr or r.stdout or '').strip().splitlines()
+        why = detail[-1] if detail else f'exit {r.returncode}'
+        print(f'wordcraft-cli failed ({why}); falling back to LibreOffice', file=sys.stderr)
+        return False
+    return True
+
+
 def start_soffice(profile):
     binary = shutil.which('soffice') or shutil.which('libreoffice')
     if not binary:
-        sys.exit('LibreOffice not found (install libreoffice-writer)')
+        sys.exit('Neither WordCraft (wordcraft-cli) nor LibreOffice (soffice) found')
     proc = subprocess.Popen([
         binary, '--headless', '--norestore', '--invisible', '--nologo', '--nodefault',
         f'-env:UserInstallation=file://{profile}',
@@ -69,7 +111,7 @@ def prop(name, value):
 
 def convert(docx, pdf):
     import uno  # noqa: F401
-    profile = f'/tmp/lo-report-{uuid.uuid4().hex[:8]}'
+    profile = f'/tmp/lo-manual-{uuid.uuid4().hex[:8]}'
     proc = start_soffice(profile)
     try:
         ctx = connect()
@@ -105,8 +147,11 @@ def main():
     args = ap.parse_args()
 
     pdf = args.output or os.path.splitext(args.docx)[0] + '.pdf'
-    if _uno():
+    if wordcraft_convert(args.docx, pdf):
+        engine = 'wordcraft'
+    elif _uno():
         convert(args.docx, pdf)
+        engine = 'libreoffice + uno'
     else:
         # Without UNO the plain conversion still works, but fields keep their
         # placeholder text — say so rather than handing over a half-filled document.
@@ -115,7 +160,7 @@ def main():
               '  install it with: sudo apt-get install python3-uno', file=sys.stderr)
         binary = shutil.which('soffice') or shutil.which('libreoffice')
         if not binary:
-            sys.exit('LibreOffice not found (install libreoffice-writer)')
+            sys.exit('Neither WordCraft (wordcraft-cli) nor LibreOffice (soffice) found')
         subprocess.run([binary, '--headless', '--norestore', '--convert-to', 'pdf',
                         '--outdir', os.path.dirname(os.path.abspath(pdf)) or '.', args.docx],
                        check=True, stdout=subprocess.DEVNULL)
@@ -123,9 +168,10 @@ def main():
                                 os.path.splitext(os.path.basename(args.docx))[0] + '.pdf')
         if os.path.abspath(produced) != os.path.abspath(pdf):
             shutil.move(produced, pdf)
+        engine = 'libreoffice, fields NOT updated'
     pages = subprocess.run(['pdfinfo', pdf], capture_output=True, text=True).stdout
     pages = next((l.split()[1] for l in pages.splitlines() if l.startswith('Pages:')), '?')
-    print(f'{pdf} ({pages} pages, fields updated)')
+    print(f'{pdf} ({pages} pages, {engine})')
 
     if args.images:
         os.makedirs(args.images, exist_ok=True)

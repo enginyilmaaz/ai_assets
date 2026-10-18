@@ -39,9 +39,10 @@ the layout elsewhere.
 
    Contents and the figure/table lists are Word fields, and `soffice --convert-to` does
    **not** refresh them: converted that way they keep their placeholder line. `to_pdf.py`
-   drives LibreOffice through UNO instead and updates every field and index before
-   exporting. Opening the `.docx` in Word fills them too — the document carries
-   `updateFields`, so Word refreshes on open.
+   renders with WordCraft when `wordcraft-cli` is installed (refreshing every field and
+   contents list itself), else drives LibreOffice through UNO and updates every field
+   and index before exporting. Opening the `.docx` in Word fills them too — the document
+   carries `updateFields`, so Word refreshes on open.
 
 ## Scripts
 
@@ -49,17 +50,19 @@ the layout elsewhere.
 |---|---|
 | `scripts/build_report.py` | JSON spec → `.docx`, using the template as the style base |
 | `scripts/verify_report.py` | checks a `.docx` against the guide (22 rules), exit code 0/1 |
-| `scripts/to_pdf.py` | LibreOffice → PDF with fields updated, optionally page images |
+| `scripts/to_pdf.py` | PDF with fields updated (WordCraft first, else LibreOffice UNO), optionally page images |
 
 Building and verifying use only the Python standard library — nothing to install.
-Rendering needs LibreOffice (`soffice`) plus `python3-uno` for the field update; without
-UNO the script still converts but says that the lists will stay unfilled. LibreOffice is
-the only converter used here because it is the one that converts from the command line on
-every platform: SoftMaker FreeOffice/TextMaker's command-line parameters are Windows-only
-(its own manual says so), and OnlyOffice needs its document server.
+Rendering prefers WordCraft (`wordcraft-cli`: it refreshes the fields and exports from
+the command line, no extra packages); without it the script falls back to LibreOffice
+(`soffice`) plus `python3-uno` for the field update, and without UNO it still converts
+but says that the lists will stay unfilled. (Other offices were ruled out earlier:
+SoftMaker FreeOffice/TextMaker's command-line parameters are Windows-only, and OnlyOffice
+needs its document server.) The two engines paginate differently — verify page
+measurements against the engine that rendered.
 
 ```bash
-sudo apt-get install libreoffice-writer python3-uno    # Debian/Ubuntu
+sudo apt-get install libreoffice-writer python3-uno    # Debian/Ubuntu, when WordCraft isn't there
 ```
 
 ## Things that bite

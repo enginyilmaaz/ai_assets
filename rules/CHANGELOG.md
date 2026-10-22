@@ -2,6 +2,11 @@
 
 All notable changes to the global rules catalog are documented here.
 
+## [1.14.0] - 2026-10-22
+
+### Added
+- Rule: `security-findings` (Security findings — report first, never fix on your own) — when a security problem turns up (hardcoded credential, injection/XSS, auth bypass, permissive ACL, vulnerable dependency, leaked key), report what it is, where it is and what it enables, then ask before fixing it. Applies to incidental findings and to one-line fixes alike, and must not turn the task into an unrequested security sweep; acting without asking is allowed only when the user already asked for security fixes in that session.
+
 ## [1.13.0] - 2026-10-04
 
 ### Changed

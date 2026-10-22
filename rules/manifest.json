@@ -32,6 +32,16 @@
       "desc_tr": "Proje dışındaki dosyaları değiştirmeden/oluşturmadan/silmeden önce kullanıcıya sor."
     },
     {
+      "id": "security-findings",
+      "file": "rules/security-findings.md",
+      "icon": "gpp_maybe",
+      "order": 35,
+      "name_en": "Security findings: ask first",
+      "name_tr": "Güvenlik bulgusu: önce sor",
+      "desc_en": "Report a security finding and ask before fixing it — never start the fix on your own.",
+      "desc_tr": "Güvenlik bulgusunu raporla ve düzeltmeden önce sor — kendi başına düzeltmeye başlama."
+    },
+    {
       "id": "git-push",
       "file": "rules/git-push.md",
       "icon": "call_split",

@@ -47,7 +47,7 @@ is auto-discovered from its own YAML frontmatter (`name`, `description`, and opt
 
 | Agent | Description |
 |-------|-------------|
-| `gorsel-uretici` | Delegates visual work (logo, icon, diagram, mockup, photoreal image) to an external coding CLI, then renders and verifies the result |
+| `image-generator` | Delegates visual work (logo, icon, diagram, mockup, photoreal image) to an external coding CLI, then renders and verifies the result |
 
 ## Consumption
 

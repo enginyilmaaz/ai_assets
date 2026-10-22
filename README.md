@@ -11,6 +11,7 @@ lives in `smartmarine/sm_ai_assets`, which embeds this repo as its `public/` sub
 skills/    reusable skills (each a folder with SKILL.md); skills/hooks.json = skill-attached auto-trigger hooks
 rules/     global CLAUDE.md rules — manifest.json (catalog) + rules/<id>.md (bodies) + preamble.md
 hooks/     standalone hooks — manifest.json (catalog) + <id>/ (scripts)
+agents/    Claude Code subagents — one <name>.md per agent (frontmatter: name, description, tools, model)
 ```
 
 ## Skills
@@ -37,8 +38,19 @@ Standalone Claude Code hooks. `hooks/manifest.json` is the catalog; each hook sh
 script under `hooks/<id>/` plus the `settings.json` fragment to install. Example:
 `voice-notify` — a Stop hook that speaks the finished task's title via edge-tts.
 
+## Agents
+
+Claude Code subagents. Unlike rules and hooks there is no manifest — each `agents/<name>.md`
+is auto-discovered from its own YAML frontmatter (`name`, `description`, and optionally
+`tools` / `model`), the same way commands are. The management app installs them into
+`~/.claude/agents/`.
+
+| Agent | Description |
+|-------|-------------|
+| `gorsel-uretici` | Delegates visual work (logo, icon, diagram, mockup, photoreal image) to an external coding CLI, then renders and verifies the result |
+
 ## Consumption
 
 The AI tool app mounts this repo at `src/assets` and install assets onto the machine
 (skills → `~/.claude/skills/`, rules → `~/.claude/CLAUDE.md`, hooks → `~/.claude/hooks/`
-+ `~/.claude/settings.json`). See `smartmarine_ai_app`.
++ `~/.claude/settings.json`, agents → `~/.claude/agents/`). See `smartmarine_ai_app`.

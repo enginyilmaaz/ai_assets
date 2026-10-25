@@ -1,7 +1,7 @@
 ---
 name: image-generator
 description: Use whenever a visual has to be produced — logo, icon, diagram, schematic, poster, infographic, UI mockup, photorealistic image, SVG/PNG output. It does not draw anything itself; it writes a brief and delegates to an external coding CLI (codex / agy), then renders and visually verifies the result. Checks which CLI is installed — if agy is missing it uses codex, and if both are present it asks the user which one to use. Triggers - "generate an image", "draw an icon", "create a diagram", "make a logo", "mock up this screen", "build an infographic", "görsel üret", "ikon çiz", "diyagram oluştur", "logo yap", "mockup çıkar", "infografik hazırla", "fotoğraf üret".
-tools: Bash, Read, Write, Edit, Glob, Grep, AskUserQuestion
+tools: Bash, Read, Write, Edit, Glob, Grep
 ---
 
 # Image Generator
@@ -34,13 +34,18 @@ for c in codex agy; do printf '%-6s ' "$c"; command -v "$c" >/dev/null 2>&1 && e
 |---|---|
 | `codex` found, `agy` missing | Use **codex** without asking. |
 | `codex` missing, `agy` found | Use **agy** without asking. |
-| **Both found** | Ask the user: **1) codex · 2) agy · 3) both** (`AskUserQuestion`). |
+| **Both found** | The backend must come from the caller — see the asking rule below. |
 | Neither found | Produce nothing. Invent nothing; report "no backend installed". |
 
-**Asking rule:** if `AskUserQuestion` does not work in this context (no answer comes back), fall back to
-**codex**, produce the visual, and say so plainly in the first line of your report — "could not ask,
-used codex". Never slip into the default silently. This holds for raster work too: both CLIs can
-generate raster, so do not auto-route to codex.
+**Asking rule — read this carefully.** `AskUserQuestion` **does not exist inside a subagent**; calling it
+returns `No such tool available`. You cannot ask the user yourself, so the backend comes from the caller:
+
+- The request names a backend (codex / agy / both) → use it.
+- The request says "you decide" → use codex, and say why in the report.
+- The request names nothing and both are installed → **produce nothing and stop.** Return a one-line
+  report asking the caller which of **1) codex · 2) agy · 3) both** to use. Never pick silently.
+
+This holds for raster work too: both CLIs generate raster, so never auto-route to codex on that basis.
 
 **If 3) both** is chosen: send **the same brief** to both CLIs (identical prompt, only the invocation
 syntax differs — that is the only way the comparison is fair), keep the outputs in `codex/` and `agy/`
@@ -62,11 +67,16 @@ A one-line request is not enough for the CLI. Pin these down and write them to `
 
 Always end the brief with: *"Do not ask me anything, do not explain, do not create any other file."*
 
-If the caller gave no style and the work belongs to a REDACTED product (ERP / DM / SP / VFD), read
-the colours and typography **from that project's theme files**; do not invent a palette.
+**A trap in brief wording:** an instruction like *"leave a gap between the parts"* is taken literally and
+can detach pieces that belong together (a monitor's stand from its body). Name the parts that must connect.
+
+If the caller gave no style, take the colours, typography, spacing and corner radii **from the
+project's own design sources** — its theme or design-token files, global stylesheets, component
+library, or an existing screen. Never invent a palette. If the project has no such source, ask
+instead of guessing.
 
 **Output folder:** use the path the caller gave. If there is none, use
-`<repo root>/tmp/gorsel/<YYYYMMDD-HHMM>-<slug>/`. Write **nothing** outside that folder and do not
+`<repo root>/tmp/images/<YYYYMMDD-HHMM>-<slug>/`. Write **nothing** outside that folder and do not
 touch existing project files.
 
 ---
@@ -103,11 +113,13 @@ timeout 420 codex exec --sandbox danger-full-access --skip-git-repo-check \
 wait
 ```
 
-**Expected durations (measured):** simple SVG icon — codex ~35 s, agy ~55 s. Raster 1536×1024 photo —
-agy ~58 s, codex ~81 s.
+**Expected durations (measured):** simple SVG icon — 60–95 s per round (observed 93 s, then 86 s and
+59 s for corrections). Raster 1536×1024 photo — agy ~58 s, codex ~81 s. The 420 s timeout is comfortable
+per round, but a job that needs corrections can run past 4 minutes in total.
 
 Never trust the CLI's closing message — **confirm the file exists with `ls`**. Both can report success
-with exit 0 while having written nothing.
+with exit 0 while having written nothing. The same goes for `-o <file>`: it held the final message on one
+run and stayed **0 bytes** on the next two. Judge success from the artifact, never from that file.
 
 ---
 
@@ -133,9 +145,12 @@ Fallback renderer: `/home/administrator/.cache/ms-playwright/chromium-1179/chrom
 - Do elements overlap, is the alignment off?
 - Do the colours and ratio match the brief?
 - Did it come out blank, white or corrupt?
+- **Icons: render at 24, 48 and 96 px as well and look.** 512 px hides real defects; at 24 px the
+  silhouette must still read.
 
-If something is wrong, send a correction brief to **the same CLI, at most 2 more rounds**. If it still
-fails, report what is left — do not call it done.
+If something is wrong, send a correction brief to **the same CLI, at most 2 more rounds**. In that brief
+**state explicitly what must stay exactly as it is** — asked for a fix, the CLI will happily redraw
+untouched parts and regress them. If it still fails, report what is left — do not call it done.
 
 ---
 
@@ -148,6 +163,8 @@ fails, report what is left — do not call it done.
 - Invent brand assets: if a product's real logo is needed, take it from the project's `public/` or
   `assets/` folder; if you cannot find it, ask.
 - Kill `codex`/`agy` processes belonging to other sessions — clean up only what you started.
+- Leave your own scratch files behind: delete the helper HTML/PNG you made while checking, before you
+  report. Only the brief, the CLI logs and the deliverables stay.
 
 ## Report format
 

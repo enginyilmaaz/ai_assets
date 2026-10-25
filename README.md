@@ -3,7 +3,7 @@
 Public catalog of reusable [Claude Code](https://docs.anthropic.com/en/docs/claude-code)
 **assets** — company-agnostic, not tied to any product. Consumed by the AI tool apps as
 a single git submodule (`src/assets`). This is the **public** half; the private superset
-lives in `REDACTED`, which embeds this repo as its `public/` submodule.
+lives in a private downstream repository, which embeds this repo as its `public/` submodule.
 
 ## Layout
 
@@ -53,4 +53,4 @@ is auto-discovered from its own YAML frontmatter (`name`, `description`, and opt
 
 The AI tool app mounts this repo at `src/assets` and install assets onto the machine
 (skills → `~/.claude/skills/`, rules → `~/.claude/CLAUDE.md`, hooks → `~/.claude/hooks/`
-+ `~/.claude/settings.json`, agents → `~/.claude/agents/`). See `REDACTED`.
++ `~/.claude/settings.json`, agents → `~/.claude/agents/`).

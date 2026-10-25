@@ -51,6 +51,10 @@ This holds for raster work too: both CLIs generate raster, so never auto-route t
 syntax differs — that is the only way the comparison is fair), keep the outputs in `codex/` and `agy/`
 subfolders, render both, and compare them in the report with concrete reasons.
 
+If only one side then needs a correction round, **keep its first-round file** as `<name>-round1.<ext>`
+and base the comparison on **round 1** — that is the only run where both sides saw the same brief.
+Say in the report which file the comparison used.
+
 **Run them in parallel**, not one after the other — measured: ~81 s in parallel, ~140 s sequentially.
 
 ---
@@ -147,10 +151,25 @@ Fallback renderer: `/home/administrator/.cache/ms-playwright/chromium-1179/chrom
 - Did it come out blank, white or corrupt?
 - **Icons: render at 24, 48 and 96 px as well and look.** 512 px hides real defects; at 24 px the
   silhouette must still read.
+- **Raster (path B): a full-frame `Read` is not enough.** The model stamps garbled fake lettering and
+  invented logos onto any surface that could carry text — vehicle sides, crane legs, containers,
+  buildings, signage — even when the brief forbids them. At full frame it looks clean; the defect only
+  appears zoomed in. Crop and enlarge those surfaces plus the four corners. **Pillow is installed**
+  (`PIL` 10.2.0) and is the tool for this — ImageMagick and `rsvg` are not:
+  ```python
+  from PIL import Image
+  im = Image.open(src)
+  im.crop((x, y, x + 320, y + 220)).resize((1280, 880), Image.LANCZOS).save(out)
+  ```
+  Delete your inspection crops before you report.
 
 If something is wrong, send a correction brief to **the same CLI, at most 2 more rounds**. In that brief
 **state explicitly what must stay exactly as it is** — asked for a fix, the CLI will happily redraw
 untouched parts and regress them. If it still fails, report what is left — do not call it done.
+
+**On path B a correction is not a repair — it regenerates the whole image**, so a composition you liked
+is simply gone. Copy the current file to `<name>-round1.<ext>` first, then weigh whether the defect is
+worth losing it. Keeping the flawed frame and naming the flaw is often the honest call.
 
 ---
 

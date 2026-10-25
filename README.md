@@ -47,7 +47,11 @@ is auto-discovered from its own YAML frontmatter (`name`, `description`, and opt
 
 | Agent | Description |
 |-------|-------------|
+| `dependency-drift-auditor` | Audits dependency consistency across a multi-repo workspace — version and pinning drift, overlapping ranges, foreign lockfiles, toolchain majors |
+| `frontend-conventions-reviewer` | Reviews changed frontend files against the project's own conventions and precedent, judging only the lines the diff added |
+| `i18n-auditor` | Audits translation files — whether a language is reachable at all, key parity, keys used but undefined, dead keys, translation coverage |
 | `image-generator` | Delegates visual work (logo, icon, diagram, mockup, photoreal image) to an external coding CLI, then renders and verifies the result |
+| `k8s-drift-auditor` | Compares Kubernetes manifests between environments — dangling references, missing workloads, image and config drift; never emits a credential |
 
 ## Consumption
 

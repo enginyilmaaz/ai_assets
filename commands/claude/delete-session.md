@@ -7,7 +7,9 @@ Kullanıcının Claude Code oturum transcript'lerini (`~/.claude/projects/<proje
 güvenle silmesine yardım et. Akış: önce proje seç, sonra o projedeki oturumları çoklu seç,
 dry-run ile ne silineceğini göster, ayrı bir "tamamen emin misin?" onayı al, sonra sil.
 
-Silme motoru: `~/.claude/commands/claude/delete-session.sh`. Sen sürücüsün: listele,
+Silme motoru: `~/.claude/commands/claude/delete-session.js` — Linux, macOS ve
+Windows'ta aynı komut. Yanındaki `delete-session.sh` eski bash karşılığıdır ve
+GNU `find`, `readlink -f`, `du` ister; Windows'ta ona uzanma. Sen sürücüsün: listele,
 seçtir, onay al, çalıştır, raporla. **Silme geri alınamaz** ve **aktif oturum asla silinmez.**
 
 Argüman olarak verilen (varsa): $ARGUMENTS
@@ -66,7 +68,7 @@ Hiç oturum seçilmezse dur ("silinecek oturum seçilmedi").
 Seçilen id'lerle ne silineceğini göster:
 
 ```bash
-bash ~/.claude/commands/claude/delete-session.sh <id1> <id2> ... --dry-run
+node ~/.claude/commands/claude/delete-session.js <id1> <id2> ... --dry-run
 ```
 
 Çıktıyı (silinecek dosya/dizinler + boyutlar) net sun. Sonra `AskUserQuestion` ile **son onay** iste:
@@ -78,7 +80,7 @@ Onay gelmeden **hiçbir şey silme**.
 ## Adım 4 — Sil
 
 ```bash
-bash ~/.claude/commands/claude/delete-session.sh <id1> <id2> ...
+node ~/.claude/commands/claude/delete-session.js <id1> <id2> ...
 ```
 
 Script bir şey atlarsa (aktif oturum / bulunamayan id) çıktıda görünür — bunu başarı gibi gizleme.
@@ -95,5 +97,6 @@ Atlanan/bulunamayan varsa tek satırla ekle.
 
 - Motor yalnızca `~/.claude/projects/` altında çalışır; `$CLAUDE_SESSION_ID` set ise aktif oturumu reddeder.
 - Her oturum için `<id>.jsonl` + varsa `<id>/` (tool-results) dizini birlikte silinir.
-- Doğrulamak için: `bash ~/.claude/commands/claude/delete-session.sh --selftest`
+- Doğrulamak için: `node ~/.claude/commands/claude/delete-session.js --selftest`
+- Eski bash akışı (`bash ~/.claude/commands/claude/delete-session.sh --selftest`) Linux'ta durur.
 - Silme geri alınamaz — mutlaka dry-run + ayrı onay adımından geç.

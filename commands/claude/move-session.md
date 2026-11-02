@@ -7,8 +7,12 @@ Kullanıcının bir Claude Code oturumunu başka bir proje dizinine taşımasın
 Proje klasörü diskte taşındığında oturum eski `~/.claude/projects/<encoded-eski-yol>/`
 altında kalır ve yeni dizinden `claude --resume` ile görünmez. Bu komut onu düzeltir.
 
-Tüm iş `~/.claude/commands/claude/move-session.sh` scriptinde. Sen sadece
-sürücüsüsün: oturumu sor, göster, onay al, çalıştır, sonucu bildir.
+Tüm iş `~/.claude/commands/claude/move-session.js` scriptinde — Linux, macOS
+ve Windows'ta aynı komut. Sen sadece sürücüsüsün: oturumu sor, göster, onay
+al, çalıştır, sonucu bildir.
+
+Yanındaki `move-session.sh` eski bash karşılığıdır; bash, python3 ve GNU
+araçları ister, Windows'ta ona uzanma.
 
 Argüman olarak verilen (varsa): $ARGUMENTS
 
@@ -36,7 +40,13 @@ $ARGUMENTS içinde bir hedef yol verilmişse onu kullan.
 Yazmadan önce dry-run ile eski/yeni konumu çıkar:
 
 ```bash
-bash ~/.claude/commands/claude/move-session.sh <session-id> <hedef-dizin> --dry-run
+node ~/.claude/commands/claude/move-session.js <session-id> <hedef-dizin> --dry-run
+```
+
+PowerShell'de aynı komut, yalnızca ev dizini farklı yazılır:
+
+```powershell
+node "$HOME/.claude/commands/claude/move-session.js" <session-id> <hedef-dizin> --dry-run
 ```
 
 Çıktıyı kullanıcıya net biçimde sun:
@@ -59,9 +69,9 @@ Onay gelmeden **hiçbir şey yazma**.
 Seçime göre çalıştır:
 
 ```bash
-bash ~/.claude/commands/claude/move-session.sh <session-id> <hedef-dizin>
+node ~/.claude/commands/claude/move-session.js <session-id> <hedef-dizin>
 # veya orijinali silmek istediyse:
-bash ~/.claude/commands/claude/move-session.sh <session-id> <hedef-dizin> --delete
+node ~/.claude/commands/claude/move-session.js <session-id> <hedef-dizin> --delete
 ```
 
 Script transcript'i satır satır doğrular (bozuk JSON + kalıntı eski yol kontrolü).
@@ -86,4 +96,6 @@ Orijinal korunduysa yedeğin nerede durduğunu tek satırla ekle.
 - Script eski proje yolunu **transcript'in kendi `cwd` alanlarından** okur; kullanıcıya sormaz.
 - Yol değişimi transcript gövdesine de uygulanır (tool çağrılarındaki dosya yolları da düzelir).
 - Varsa `<session-id>/` (tool-results) ve `memory/` klasörleri de taşınır; memory dosyaları üzerine yazılmaz.
-- Script'i doğrulamak için: `bash ~/.claude/commands/claude/move-session.sh --selftest`
+- Script'i doğrulamak için: `node ~/.claude/commands/claude/move-session.js --selftest`
+- Yollar transcript'e JSON olarak yazıldığı için yeniden yazma kayıt kayıt yapılır, ham metin üzerinde değil; Windows yollarındaki ters bölü işaretleri aksi hâlde hiç eşleşmez ve taşıma sessizce hiçbir yolu düzeltmez.
+- Eski bash akışı (`bash ~/.claude/commands/claude/move-session.sh --selftest`) Linux'ta durur; `python3` yoksa `py -3` kullanır.

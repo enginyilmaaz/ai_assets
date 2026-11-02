@@ -16,11 +16,13 @@ Sessions are stored per project at `~/.claude/projects/<project>/<uuid>.jsonl` (
 **Argument:** `$ARGUMENTS`
 
 ## 0) Setup
-- **Helper script:** `devam.sh` sits next to this file, in the skill's base directory (printed as "Base directory for this skill: …" when the skill loads). Call it as `bash "<base>/devam.sh" <subcommand> …`. Subcommands:
-  - `CURRENT=<UUID> LIMIT=40 bash <base>/devam.sh list` → newest sessions across all projects
-  - `CURRENT=<UUID> bash <base>/devam.sh list "<keyword>"` → title-filtered
-  - `bash <base>/devam.sh find <id>` → resolve an id/prefix to a full path (may print `NONE` / `AMBIGUOUS`)
-  - `TAIL=28 bash <base>/devam.sh digest <id>` → chosen session's META + recent turns
+- **Helper script:** `devam.mjs` sits next to this file, in the skill's base directory (printed as "Base directory for this skill: …" when the skill loads). Call it as `node "<base>/devam.mjs" <subcommand> …` — the same command on Linux, macOS and Windows. Subcommands:
+  - `CURRENT=<UUID> LIMIT=40 node <base>/devam.mjs list` → newest sessions across all projects
+  - `CURRENT=<UUID> node <base>/devam.mjs list "<keyword>"` → title-filtered
+  - `node <base>/devam.mjs find <id>` → resolve an id/prefix to a full path (may print `NONE` / `AMBIGUOUS`)
+  - `TAIL=28 node <base>/devam.mjs digest <id>` → chosen session's META + recent turns
+  - On Windows PowerShell an environment variable goes in front of the command as `$env:TAIL=28`, not inline.
+- **`devam.sh` is the older bash equivalent** and is kept for a Linux shell session. It needs bash, jq, GNU find/stat/date, grep, awk and sed, so do not reach for it on Windows.
 - **Current session id (CURRENT):** the uuid in your own scratchpad directory path (e.g. `/tmp/claude-*/<project>/<UUID>/scratchpad` → `UUID`). Pass it so the list can mark `«this session»` and you don't resume yourself by accident.
 
 ## 1) Interpret the argument
@@ -37,13 +39,17 @@ Sessions are stored per project at `~/.claude/projects/<project>/<uuid>.jsonl` (
 - If the chosen session is `«this session»`, say they are already here; confirm they meant a different one.
 
 ## 3) Continue (where we left off)
-- Run `TAIL=28 bash <base>/devam.sh digest <id>`. Read META (TITLE, FOLDER, BRANCH, TURNS, FIRST REQUEST, LAST PROMPT) + the recent turns.
+- Run `TAIL=28 node <base>/devam.mjs digest <id>`. Read META (TITLE, FOLDER, BRANCH, TURNS, FIRST REQUEST, LAST PROMPT) + the recent turns.
 - Give a short **"where we left off" summary in the user's language**: goal (FIRST REQUEST / title) · what was done (from recent turns) · pending / next step · any open question.
 - **Folder warning:** if `FOLDER` differs from the current working directory, warn the user ("this chat was under `<FOLDER>`, we're now in `<cwd>`; I may need to switch there for related files").
 - **Confirm** the next step (or state in one line what you'll do) and continue the work in the current session.
-- If you need more detail, the raw file path is in the `FILE:` line of `digest`/`find`; raise `TAIL` or run targeted `jq` over that `.jsonl` for wider context.
+- If you need more detail, the raw file path is in the `FILE:` line of `digest`/`find`; raise `TAIL` for wider context. Do not slurp that `.jsonl` — a transcript can pass 500 MB; read a bounded slice, and on Linux `jq` over it works too.
 
 ## Notes
 - The filter searches **titles** (raw grep over transcripts is useless because every transcript embeds the skill catalog); sessions without an auto-title won't match a filter but still appear in the unfiltered list.
 - The list shows the newest ~40 sessions across all projects; use a filter to reach older ones.
 - The digest reads only a bounded slice, never the whole (possibly multi-MB) transcript.
+
+## Notes on the helper itself
+- `devam.mjs` needs nothing but node — no bash, jq, GNU find/stat/date, grep, awk, sed or coreutils — so it is the same command on every platform.
+- It never loads a transcript into memory. `list` stats every file, sorts by last-modified and only then opens the few it will show, stopping each read once it has the title; `digest` streams the file once and keeps only the last `TAIL` turns. A 549 MB transcript digests in a few seconds in about 140 MB of RSS.

@@ -12,12 +12,14 @@
       "event": "Stop",
       "files": [
         { "src": "voice-notify/notify-task-done.sh", "dest": "~/.claude/hooks/notify-task-done.sh", "chmod": "0755" },
+        { "src": "voice-notify/notify-task-done.js", "dest": "~/.claude/hooks/notify-task-done.js", "chmod": "0755" },
+        { "src": "voice-notify/play-notification.ps1", "dest": "~/.claude/hooks/play-notification.ps1", "chmod": "0644" },
         { "src": "voice-notify/notification.mp3", "dest": "~/.claude/hooks/notification.mp3", "chmod": "0644" }
       ],
       "settings": {
         "hooks": {
           "Stop": [
-            { "hooks": [ { "type": "command", "command": "bash ~/.claude/hooks/notify-task-done.sh", "timeout": 15, "statusMessage": "Bildirim sesi..." } ] }
+            { "hooks": [ { "type": "command", "command": "node ~/.claude/hooks/notify-task-done.js", "timeout": 15, "statusMessage": "Bildirim sesi..." } ] }
           ]
         }
       },

@@ -38,6 +38,16 @@ For detailed pattern definitions see: [analysis-patterns.md](analysis-patterns.m
     printf '%-28s %s\n' "$name" "${desc:-—}"
   done
   ```
+  Native Windows (PowerShell):
+  ```powershell
+  Get-ChildItem -Directory "$HOME/.claude/skills" | ForEach-Object {
+    $skill = $_.Name
+    $description = (Get-Content (Join-Path $_.FullName 'SKILL.md') -TotalCount 8 -ErrorAction SilentlyContinue |
+      Select-String '^description:\s*').Line -replace '^description:\s*', ''
+    if (-not $description) { $description = '—' }
+    '{0,-28} {1}' -f $skill, $description
+  }
+  ```
 - For large scopes (10+ files), use the Agent tool with multiple parallel agents to speed up analysis
 
 ### Step 2 — Analyze Every Function/Method

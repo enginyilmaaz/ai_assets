@@ -10,7 +10,6 @@ Apply this BEFORE and WHILE writing code, not after. It is the **proactive twin*
 `code-review` skill: both enforce the SAME rules from one source of truth.
 
 **Single source of truth:** [coding-standards.md](../code-review/coding-standards.md)
-(absolute path: `/home/administrator/.claude/skills/code-review/coding-standards.md`)
 
 Read it for the full, detailed rule set. This SKILL.md is the short "when + how to apply"
 wrapper - it does not duplicate the rules.

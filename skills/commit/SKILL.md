@@ -51,26 +51,19 @@ Resolve `NAME` and `EMAIL` **field by field**, in this strict priority order:
 
    When this last-resort tier is used, WARN the user (e.g. "Git has no configured identity; falling back to the &lt;tool&gt; login &lt;name&gt; &lt;email&gt;. Run `git config --global user.name/user.email` to set a permanent identity.") and do **NOT** write to git config automatically.
 
-Reference snippet:
+Reference snippet (Linux/macOS and native Windows PowerShell):
 
 ```bash
-NAME="$(git config --global user.name)";  EMAIL="$(git config --global user.email)"
-[ -z "$NAME" ]  && NAME="$(git config --local user.name)"
-[ -z "$EMAIL" ] && EMAIL="$(git config --local user.email)"
-# Last-resort AI-app login fallback (only if a field is still empty):
-if [ -z "$NAME" ] || [ -z "$EMAIL" ]; then
-  if [ -f "$HOME/.claude.json" ]; then
-    [ -z "$NAME" ]  && NAME="$(jq -r '.oauthAccount.displayName // empty'  "$HOME/.claude.json")"
-    [ -z "$EMAIL" ] && EMAIL="$(jq -r '.oauthAccount.emailAddress // empty' "$HOME/.claude.json")"
-  elif [ -f "$HOME/.codex/auth.json" ]; then
-    payload="$(jq -r '.tokens.id_token' "$HOME/.codex/auth.json" | cut -d. -f2 \
-      | python3 -c 'import sys,base64,json; s=sys.stdin.read().strip(); s+="="*(-len(s)%4); print(json.dumps(json.loads(base64.urlsafe_b64decode(s))))')"
-    [ -z "$NAME" ]  && NAME="$(printf '%s' "$payload"  | jq -r '.name  // empty')"
-    [ -z "$EMAIL" ] && EMAIL="$(printf '%s' "$payload" | jq -r '.email // empty')"
-  fi
-  echo "WARNING: git identity not configured; using AI-app login: $NAME <$EMAIL>"
-fi
+NAME="$(node ~/.claude/skills/commit/identity.mjs --name)"
+EMAIL="$(node ~/.claude/skills/commit/identity.mjs --email)"
 ```
+
+```powershell
+$NAME = node "$HOME/.claude/skills/commit/identity.mjs" --name
+$EMAIL = node "$HOME/.claude/skills/commit/identity.mjs" --email
+```
+
+`identity.mjs` implements the global → local → AI-app fallback order, prints the required warning only when the fallback is used, and never writes git configuration or invokes a shell-specific JSON tool.
 
 Keep `NAME` / `EMAIL` for Step 5 — every commit in this run is authored with them.
 
@@ -126,17 +119,23 @@ git pull origin <current-branch>
 For each logical group of changes:
 
 1. Stage only the relevant files (include CHANGELOG.md/README.md if updated): `git add <specific files>`
-2. Commit with a clear message using HEREDOC format, forcing the identity resolved in **Step 0** via inline env vars (these outrank any ambient `-c user.*` or config an AI tool may have injected):
+2. Commit with a clear message, forcing the identity resolved in **Step 0** via inline env vars (these outrank any ambient `-c user.*` or config an AI tool may have injected). Use stdin instead of a heredoc so the same command works on every platform:
 
 ```bash
-GIT_AUTHOR_NAME="$NAME" GIT_AUTHOR_EMAIL="$EMAIL" \
-GIT_COMMITTER_NAME="$NAME" GIT_COMMITTER_EMAIL="$EMAIL" \
-git commit -m "$(cat <<'EOF'
-Short summary of the change (max ~72 chars)
+printf '%s\n' 'Short summary of the change (max ~72 chars)' '' 'Optional details if needed, explaining why or providing context.' | \
+  GIT_AUTHOR_NAME="$NAME" GIT_AUTHOR_EMAIL="$EMAIL" \
+  GIT_COMMITTER_NAME="$NAME" GIT_COMMITTER_EMAIL="$EMAIL" \
+  git commit -F -
+```
 
-Optional details if needed, explaining why or providing context.
-EOF
-)"
+```powershell
+$summary = 'Short summary of the change (max ~72 chars)'
+$details = 'Optional details if needed, explaining why or providing context.'
+$env:GIT_AUTHOR_NAME = $NAME
+$env:GIT_AUTHOR_EMAIL = $EMAIL
+$env:GIT_COMMITTER_NAME = $NAME
+$env:GIT_COMMITTER_EMAIL = $EMAIL
+"$summary`n`n$details" | git commit -F -
 ```
 
 ### Step 6: Push (only if requested)

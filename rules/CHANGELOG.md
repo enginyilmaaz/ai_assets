@@ -2,6 +2,11 @@
 
 All notable changes to the global rules catalog are documented here.
 
+## [1.15.0] - 2026-11-04
+
+### Added
+- Rule: `open-produced-files` (Produced files — open them, don't just print a path) — when a run produces a file whose point is to be looked at (a design or HTML page, a PDF, a report, a generated image or diagram, a chart, a requested screenshot), open it on the user's screen instead of only naming its path: a PDF in a real PDF application rather than a browser tab, everything else visual in the browser, office documents in the system default handler. The application is resolved from the machine (what is installed and registered) rather than assumed, because a browser is commonly the registered handler for `application/pdf`. The process is always detached (`setsid -f` / `open` / `start ""`) so it neither blocks the session nor dies with the terminal, the absolute path is still printed in one piece, only the deliverable is opened (one window per file, no intermediate artifacts, never twice), and nothing is opened at all without a desktop session — no `DISPLAY`/`WAYLAND_DISPLAY`, over SSH, in a container or in CI.
+
 ## [1.14.0] - 2026-10-22
 
 ### Added

@@ -160,6 +160,16 @@
       "name_tr": "Artifact için onay",
       "desc_en": "Never create, publish or update an Artifact without asking first and getting explicit approval.",
       "desc_tr": "Sormadan ve açık onay almadan asla Artifact oluşturma, yayınlama veya güncelleme."
+    },
+    {
+      "id": "open-produced-files",
+      "file": "rules/open-produced-files.md",
+      "icon": "open_in_new",
+      "order": 112,
+      "name_en": "Open produced files",
+      "name_tr": "Üretilen dosyaları aç",
+      "desc_en": "When a run produces something meant to be looked at — a design, a PDF, a report, an image — open it on the user's screen instead of only printing its path: a PDF in a real PDF application, everything else visual in the browser, the process detached so it cannot block the session, the absolute path still printed, and nothing opened at all when there is no desktop session.",
+      "desc_tr": "Bir koşu bakılmak üzere bir şey ürettiğinde — tasarım, PDF, rapor, görsel — yalnızca yolunu yazmak yerine kullanıcının ekranında aç: PDF'i gerçek bir PDF uygulamasında, görsel olan diğer her şeyi tarayıcıda; süreci oturumu kilitlemeyecek şekilde kopar, mutlak yolu yine de yaz ve masaüstü oturumu yoksa hiç açma."
     }
   ]
 }

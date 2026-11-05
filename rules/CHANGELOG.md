@@ -2,6 +2,11 @@
 
 All notable changes to the global rules catalog are documented here.
 
+## [1.17.0] - 2026-11-05
+
+### Changed
+- Rule: `chrome-extension-device` — the rule now covers reaching a remote machine on purpose, not only staying off one by accident, and its heading changed from *drive the browser on this computer, never another machine* to **Chrome extension — drive the browser on the machine you mean**. This computer is still the default target, but a machine the user names is the target and reaching it is the point: the name is resolved against the connected browsers and against the `Host` aliases in `~/.ssh/config`, and the machine being driven is stated before the first action, because the window opens on a screen the agent cannot see. Name matching is normalised — case folded, separators ignored, and a trailing machine-type suffix such as `-pc`, `-win` or `-laptop` dropped — because an exact match turned out to be the exception rather than the rule on a real account, where none of thirteen aliases matched a connected browser's display name literally while one pair differed only by such a suffix. An SSH alias is explicitly not evidence that the extension is connected on that machine: when a named machine has no connected browser the rule says so and lists what is connected, instead of falling back to another machine.
+
 ## [1.16.0] - 2026-11-05
 
 ### Added

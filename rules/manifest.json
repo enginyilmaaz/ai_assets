@@ -178,8 +178,8 @@
       "order": 114,
       "name_en": "Chrome extension: this computer",
       "name_tr": "Chrome eklentisi: bu bilgisayar",
-      "desc_en": "The Chrome extension connects every browser signed into the same account, on every machine, so a browser action can open a tab on another computer's screen. List the connected browsers before the first one, pick the entry that is provably this machine — onThisComputer, or a name matching this host's name, never isLocal — and ask instead of guessing when nothing matches.",
-      "desc_tr": "Chrome eklentisi aynı hesaba bağlı bütün tarayıcılara, her makinedekine bağlanır; bu yüzden bir tarayıcı işlemi başka bilgisayarın ekranında sekme açabilir. İlk işlemden önce bağlı tarayıcıları listele, kanıtlanabilir biçimde bu makine olanı seç — onThisComputer veya bu makinenin adıyla eşleşen ad, asla isLocal — ve hiçbiri eşleşmiyorsa tahmin etme, sor."
+      "desc_en": "The Chrome extension connects every browser signed into the same account, on every machine, so a browser action can open a tab on another computer's screen. List the connected browsers before the first one and drive the machine actually meant: this computer by default, or the remote machine the user names, resolved against the connected browsers and the Host aliases in ~/.ssh/config with case, separators and a -pc/-win suffix ignored. Never pick on isLocal, and ask instead of guessing when nothing resolves.",
+      "desc_tr": "Chrome eklentisi aynı hesaba bağlı bütün tarayıcılara, her makinedekine bağlanır; bu yüzden bir tarayıcı işlemi başka bilgisayarın ekranında sekme açabilir. İlk işlemden önce bağlı tarayıcıları listele ve gerçekten kastedilen makineyi sür: varsayılan bu bilgisayar, kullanıcı bir uzak makine adı verdiyse o — ad, bağlı tarayıcılar ve ~/.ssh/config'teki Host alias'ları ile büyük/küçük harf, ayraç ve -pc/-win eki yok sayılarak eşleştirilir. Asla isLocal'a bakarak seçme; hiçbiri çözülmüyorsa tahmin etme, sor."
     }
   ]
 }

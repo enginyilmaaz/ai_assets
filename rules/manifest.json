@@ -170,6 +170,16 @@
       "name_tr": "Üretilen dosyaları aç",
       "desc_en": "When a run produces something meant to be looked at — a design, a PDF, a report, an image — open it on the user's screen instead of only printing its path: a PDF in a real PDF application, everything else visual in the browser, the process detached so it cannot block the session, the absolute path still printed, and nothing opened at all when there is no desktop session.",
       "desc_tr": "Bir koşu bakılmak üzere bir şey ürettiğinde — tasarım, PDF, rapor, görsel — yalnızca yolunu yazmak yerine kullanıcının ekranında aç: PDF'i gerçek bir PDF uygulamasında, görsel olan diğer her şeyi tarayıcıda; süreci oturumu kilitlemeyecek şekilde kopar, mutlak yolu yine de yaz ve masaüstü oturumu yoksa hiç açma."
+    },
+    {
+      "id": "chrome-extension-device",
+      "file": "rules/chrome-extension-device.md",
+      "icon": "devices",
+      "order": 114,
+      "name_en": "Chrome extension: this computer",
+      "name_tr": "Chrome eklentisi: bu bilgisayar",
+      "desc_en": "The Chrome extension connects every browser signed into the same account, on every machine, so a browser action can open a tab on another computer's screen. List the connected browsers before the first one, pick the entry that is provably this machine — onThisComputer, or a name matching this host's name, never isLocal — and ask instead of guessing when nothing matches.",
+      "desc_tr": "Chrome eklentisi aynı hesaba bağlı bütün tarayıcılara, her makinedekine bağlanır; bu yüzden bir tarayıcı işlemi başka bilgisayarın ekranında sekme açabilir. İlk işlemden önce bağlı tarayıcıları listele, kanıtlanabilir biçimde bu makine olanı seç — onThisComputer veya bu makinenin adıyla eşleşen ad, asla isLocal — ve hiçbiri eşleşmiyorsa tahmin etme, sor."
     }
   ]
 }

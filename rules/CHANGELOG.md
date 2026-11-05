@@ -2,6 +2,11 @@
 
 All notable changes to the global rules catalog are documented here.
 
+## [1.16.0] - 2026-11-05
+
+### Added
+- Rule: `chrome-extension-device` (Chrome extension — drive the browser on this computer, never another machine) — the Claude in Chrome extension connects every Chrome signed into the same account on every machine, so a browser action goes to whichever browser the session is pointed at and can open a tab on somebody else's screen. The rule calls `list_connected_browsers` before the first browser action, refuses the default (which is only *the browser picked last* — account state, not a statement about this machine), and selects by evidence: `onThisComputer` when exactly one entry has it, otherwise the entry whose `name` equals this machine's host name. `isLocal` is explicitly ruled out as evidence — it only means the operating system matches, so on an account holding several machines of the same OS it is true for all of them — and an absent `onThisComputer` is read as *unknown*, not *no*. Written against a real account with six browsers connected across four machines, where no entry carried `onThisComputer` at all and three carried `isLocal`. When nothing matches, the rule asks instead of guessing; a tab that did not appear on this screen stops the run rather than continuing on the wrong browser.
+
 ## [1.15.0] - 2026-11-04
 
 ### Added

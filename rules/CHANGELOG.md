@@ -2,6 +2,11 @@
 
 All notable changes to the global rules catalog are documented here.
 
+## [1.19.0] - 2026-11-06
+
+### Added
+- Rule: `agent-home-protected` (The agent's own home directory — never delete or rename it) — `~/.claude` and `~/.codex` are the directories the agent is running out of: the session transcript, shell snapshots, plugins, skills, agents, MCP configuration and credentials. Renaming one mid-session pulls the ground out from under that session and the restore step never runs. The rule forbids deleting, renaming or moving them on the agent's own initiative and forbids writing such a step into a subagent's instructions; empty-machine behaviour is verified with a fake home under the temp folder instead. An explicit user request takes two confirmations in a row — an arithmetic question, then a typed confirmation word — and the agent states what will be removed before asking. Installing into the directory or editing a file inside it on request stays ordinary work.
+
 ## [1.18.0] - 2026-11-06
 
 ### Added

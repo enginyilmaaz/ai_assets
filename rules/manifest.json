@@ -190,6 +190,16 @@
       "name_tr": "Test kurmadan önce sor",
       "desc_en": "Check whether the project already has test infrastructure. When it has none, stop and ask before standing up a runner, a test script or a first test — and before writing a test-first plan. When it already tests, just use what is there.",
       "desc_tr": "Projede hâlihazırda test altyapısı var mı diye bak. Yoksa; runner, test script'i ya da ilk testi kendiliğinden kurma — test öncelikli bir plan yazmadan önce de sor ve cevabı bekle. Zaten test eden bir projede ise mevcut düzeni olduğu gibi kullan."
+    },
+    {
+      "id": "agent-home-protected",
+      "file": "rules/agent-home-protected.md",
+      "icon": "shield",
+      "order": 118,
+      "name_en": "Never touch the agent's home",
+      "name_tr": "Ajanın kendi klasörüne dokunma",
+      "desc_en": "~/.claude and ~/.codex are the directories the agent runs out of — this session's transcript, shell snapshots, plugins, skills and credentials. Never delete, rename or move them on your own, and never put such a step in a subagent's instructions; verify empty-machine behaviour with a fake home under the temp folder. An explicit request takes two confirmations: an arithmetic question, then a typed confirmation word.",
+      "desc_tr": "~/.claude ve ~/.codex ajanın altından çalıştığı dizinlerdir — bu oturumun transkripti, shell snapshot'ları, eklentileri, skill'leri ve kimlik bilgileri oradadır. Kendiliğinden asla silme, yeniden adlandırma veya taşıma; subagent talimatına da böyle bir adım yazma. Boş makine davranışı temp altında sahte bir home ile doğrulanır. Açık istek geldiğinde iki kademeli onay şart: önce bir aritmetik soru, sonra yazılı onay kelimesi."
     }
   ]
 }

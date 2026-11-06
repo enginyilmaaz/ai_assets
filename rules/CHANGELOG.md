@@ -2,6 +2,11 @@
 
 All notable changes to the global rules catalog are documented here.
 
+## [1.18.0] - 2026-11-06
+
+### Added
+- Rule: `test-infrastructure` (Test infrastructure — ask before introducing it) — before writing a test or adding a framework, check whether the project already has test infrastructure: a test script, a runner among its dependencies, a test folder, a CI step. When it has none, stop and ask before standing up a runner, a test script or a first test, and do not write a test-first plan for such a project until that is answered. When it already tests, use what is there without asking. The reason is cost rather than principle: on a small change the harness takes longer than the change, and that is the user's time to spend.
+
 ## [1.17.0] - 2026-11-05
 
 ### Changed

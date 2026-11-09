@@ -178,8 +178,8 @@
       "order": 114,
       "name_en": "Chrome extension: this computer",
       "name_tr": "Chrome eklentisi: bu bilgisayar",
-      "desc_en": "The Chrome extension connects every browser signed into the same account, on every machine, so a browser action can open a tab on another computer's screen. List the connected browsers before the first one and drive the machine actually meant: this computer by default, or the remote machine the user names, resolved against the connected browsers and the Host aliases in ~/.ssh/config with case, separators and a -pc/-win suffix ignored. Never pick on isLocal, and ask instead of guessing when nothing resolves.",
-      "desc_tr": "Chrome eklentisi aynı hesaba bağlı bütün tarayıcılara, her makinedekine bağlanır; bu yüzden bir tarayıcı işlemi başka bilgisayarın ekranında sekme açabilir. İlk işlemden önce bağlı tarayıcıları listele ve gerçekten kastedilen makineyi sür: varsayılan bu bilgisayar, kullanıcı bir uzak makine adı verdiyse o — ad, bağlı tarayıcılar ve ~/.ssh/config'teki Host alias'ları ile büyük/küçük harf, ayraç ve -pc/-win eki yok sayılarak eşleştirilir. Asla isLocal'a bakarak seçme; hiçbiri çözülmüyorsa tahmin etme, sor."
+      "desc_en": "The Chrome extension connects every browser signed into the same account, on every machine, so an action can open a tab on another computer's screen. Use the browser on the computer this session runs on: list the connected browsers first, identify this machine by onThisComputer or a name matching its host name, never by isLocal, and ask when nothing resolves. When the extension is not installed or no browser is connected, carry on silently.",
+      "desc_tr": "Chrome eklentisi aynı hesaba bağlı bütün tarayıcılara, her makinedekine bağlanır; bu yüzden bir işlem başka bilgisayarın ekranında sekme açabilir. Oturumun çalıştığı bilgisayarın tarayıcısı kullanılır: önce bağlı tarayıcıları listele, bu makineyi onThisComputer ya da hostname ile eşleşen ad üzerinden tanı, asla isLocal'a bakma, hiçbiri çözülmezse sor. Eklenti kurulu değilse veya hiçbir tarayıcı bağlı değilse sessizce devam et."
     },
     {
       "id": "test-infrastructure",

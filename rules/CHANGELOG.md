@@ -2,6 +2,11 @@
 
 All notable changes to the global rules catalog are documented here.
 
+## [1.20.0] - 2026-11-09
+
+### Changed
+- Rule: `chrome-extension-device` — narrowed back to what it is for, and renamed to **Chrome extension — use the browser on this computer**. The remote-machine half (naming a machine, resolving it against the `Host` aliases in `~/.ssh/config`, normalised name matching) is gone: it belonged to a separate piece of work and made the rule argue for something it was never asked to do. What remains is the original point — the extension connects every Chrome on the account, so identify the one on the computer this session runs on, by `onThisComputer` or a host-name match, never by `isLocal`, and ask when nothing resolves. **New first clause: when the extension is not installed or no browser is connected, say nothing** — do not report it as a missing capability, do not offer to install it, do not probe its MCP server; the rest of the rule applies only when the extension is actually in use. The heading changed, so an installed copy is not replaced in place.
+
 ## [1.19.0] - 2026-11-06
 
 ### Added

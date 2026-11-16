@@ -13,6 +13,8 @@ import {
   CONFIG_PATH,
   DEFAULT_PULL_LIMIT,
   MAX_SENDS_PER_HOUR,
+  OUTBOX_DIR,
+  formatBytes,
   SESSION_DIR,
   SKILL_DIR,
   STATE_DIR,
@@ -27,6 +29,7 @@ import {
   recentSendCount,
   recordSend,
   releaseLock,
+  resolveOutboxFile,
   writeConfig,
 } from "./wa_lib.mjs";
 
@@ -37,6 +40,7 @@ import {
   listGroups,
   loadLibrary,
   resolveChatId,
+  sendMedia,
   sendText,
   sessionExists,
   shutdown,
@@ -57,11 +61,15 @@ const USAGE = `whatsapp skill — read and send messages in a chat, on demand.
   pull --chat <alias> [--limit N]            read the last N messages
   send --chat <alias> --text "..."           PREVIEW only, nothing is sent
   send --chat <alias> --text "..." --confirm send it
+  send --chat <alias> --media <name> --confirm  send a file from the outbox
   ask  --chat <alias> --text "..." --confirm send, then wait for the reply
 
-Common flags: --json  --file <path>  --code  --quote <msgId>  --wait <seconds>
+Common flags: --json  --file <name in outbox>  --code  --media <name in outbox>
+              --as-document | --as-media  --quote <msgId>  --wait <seconds>
               --mode any|quoted
-Settings come from environment variables (WA_STATE_DIR, WA_CHROME_PATH,
+--file and --media may only name a file inside the outbox directory; arbitrary
+paths are refused. With --media, --text becomes the caption.
+Settings come from environment variables (WA_STATE_DIR, WA_OUTBOX_DIR, WA_CHROME_PATH,
 WA_MAX_SENDS_PER_HOUR, WA_READY_TIMEOUT_MS, WA_WAIT_TIMEOUT_MS, WA_HEADLESS).
 `;
 
@@ -136,6 +144,7 @@ async function cmdDoctor() {
     check("state dir", STATE_DIR, fs.existsSync(STATE_DIR)),
     check("session", SESSION_DIR, sessionExists()),
     check("config", CONFIG_PATH, fs.existsSync(CONFIG_PATH)),
+    check("outbox", OUTBOX_DIR, fs.existsSync(OUTBOX_DIR)),
     check("sends this hour", `${recentSendCount()}/${MAX_SENDS_PER_HOUR}`, true),
   ];
   const text = checks.map((c) => `${c.ok ? "OK  " : "--  "}${c.name.padEnd(16)}${c.detail}`).join("\n");
@@ -294,10 +303,15 @@ async function cmdPull() {
 // ---------------------------------------------------------------------------
 
 async function cmdSend() {
-  const { target, text } = sendInputs();
+  if (args.val("--media")) {
+    await sendAttachment();
+    return;
+  }
+
+  const { target, text, file } = sendInputs();
 
   if (!args.has("--confirm")) {
-    emit(previewPayload(target, text, "send"), asJson);
+    emit(previewPayload(target, text, "send", file), asJson);
     return;
   }
 
@@ -310,15 +324,53 @@ async function cmdSend() {
   });
 }
 
+async function sendAttachment() {
+  const target = requireChat();
+  const media = resolveOutboxFile(args.val("--media"));
+  const caption = args.val("--text");
+  const bytes = fs.statSync(media).size;
+  const asDocument = args.has("--as-document") ? true : args.has("--as-media") ? false : null;
+
+  if (!args.has("--confirm")) {
+    const alias = readConfig().aliases[target];
+    const where = alias ? `${aliasName(alias)} (${aliasId(alias)})` : `${target} (resolved on send)`;
+    emit(
+      { ok: true, sent: false, chat: where, media, bytes,
+        text:
+          `chat    : ${where}\n` +
+          `quota   : ${recentSendCount()}/${MAX_SENDS_PER_HOUR} sends this hour\n` +
+          `file    : ${media} (${formatBytes(bytes)})\n` +
+          `caption : ${caption || "(none)"}\n` +
+          `NOT SENT : re-run the same send with --confirm` },
+      asJson,
+    );
+    return;
+  }
+
+  assertSendAllowed();
+  await withClient(async (client) => {
+    const chatId = await resolveChatId(client, target);
+    const sent = await sendMedia(client, chatId, media, { caption, asDocument });
+    recordSend(chatId);
+    emit(
+      { ok: true, sent: true, chatId, messageId: sent.id, ...sent,
+        text:
+          `SENT ${sent.asDocument ? "as document" : "as media"} to ${chatId}\n` +
+          `file: ${media} (${sent.mimetype}, ${formatBytes(sent.bytes)})\nid: ${sent.id}` },
+      asJson,
+    );
+  });
+}
+
 async function cmdAsk() {
-  const { target, text } = sendInputs();
+  const { target, text, file } = sendInputs();
   const waitSeconds = args.intVal("--wait", 0);
   const waitMs = waitSeconds > 0 ? waitSeconds * 1000 : WAIT_TIMEOUT_MS;
   const mode = args.val("--mode", "any");
   if (!["any", "quoted"].includes(mode)) throw new Error(`--mode must be "any" or "quoted"`);
 
   if (!args.has("--confirm")) {
-    const preview = previewPayload(target, text, "ask");
+    const preview = previewPayload(target, text, "ask", file);
     preview.text += `\nThen waits up to ${Math.round(waitMs / 1000)}s for a reply (mode: ${mode}).`;
     emit(preview, asJson);
     return;
@@ -346,24 +398,30 @@ async function cmdAsk() {
 
 function sendInputs() {
   const target = requireChat();
-  const file = args.val("--file");
+  const given = args.val("--file");
+  const file = given ? resolveOutboxFile(given) : null;
   let text = file ? fs.readFileSync(file, "utf8") : args.val("--text");
-  if (!text || !text.trim()) throw new Error("nothing to send. Pass --text \"...\" or --file <path>");
+  if (!text || !text.trim()) throw new Error("nothing to send. Pass --text \"...\" or --file <name>");
   if (args.has("--code")) text = ["```", text.replace(/\s+$/, ""), "```"].join("\n");
-  return { target, text };
+  return { target, text, file };
 }
 
-function previewPayload(target, text, verb) {
+function previewPayload(target, text, verb, file = null) {
   const alias = readConfig().aliases[target];
   const where = alias ? `${aliasName(alias)} (${aliasId(alias)})` : `${target} (resolved on send)`;
+  // A file-backed send always names its source and size: the operator has to be
+  // able to see what is about to leave the machine, not just the rendered text.
+  const source = file ? `source: ${file} (${fs.statSync(file).size} bytes)\n` : "";
   return {
     ok: true,
     sent: false,
     chat: where,
     body: text,
+    file,
     text:
       `chat  : ${where}\n` +
       `quota : ${recentSendCount()}/${MAX_SENDS_PER_HOUR} sends this hour\n` +
+      source +
       `----- message -----\n${text}\n-------------------\n` +
       `NOT SENT : re-run the same ${verb} with --confirm`,
   };

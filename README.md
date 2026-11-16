@@ -25,7 +25,7 @@ agents/    Claude Code subagents — one <name>.md per agent (frontmatter: name,
 | `devam` | `/devam` | Resume an earlier Claude Code session — list past sessions (title · last activity · project) and continue where you left off |
 | `doc-report-generator` | `/doc-report-generator` | Formal Word report from a JSON spec — writing-guide layout, APA references, verify + render to PDF |
 | `optimize` | `/optimize` | Performance optimization — O(n²)→O(n), N+1 queries, Map/Set, batching |
-| `whatsapp` | `/whatsapp` | Read and send WhatsApp messages in a chat, on demand — pull what a team wrote, ask them a question, wait for the reply; every opening message is previewed before it is sent |
+| `whatsapp` | `/whatsapp` | Read and send WhatsApp messages in a chat, on demand — pull what a team wrote, ask them a question, wait for the reply, send code and file attachments; every opening message is previewed before it is sent |
 
 ## Rules
 

@@ -21,6 +21,7 @@ export const SESSION_DIR = path.join(STATE_DIR, "session");
 export const CONFIG_PATH = path.join(STATE_DIR, "config.json");
 export const LEDGER_PATH = path.join(STATE_DIR, "sent.json");
 export const LOCK_PATH = path.join(STATE_DIR, "wa.lock");
+export const OUTBOX_DIR = process.env.WA_OUTBOX_DIR || path.join(STATE_DIR, "outbox");
 
 export const CHROME_PATH = process.env.WA_CHROME_PATH || "/usr/bin/google-chrome";
 export const READY_TIMEOUT_MS = intEnv("WA_READY_TIMEOUT_MS", 120_000);
@@ -29,13 +30,17 @@ export const SHUTDOWN_TIMEOUT_MS = intEnv("WA_SHUTDOWN_TIMEOUT_MS", 10_000);
 export const SEND_DELAY_MS = intEnv("WA_SEND_DELAY_MS", 1_500);
 export const MAX_SENDS_PER_HOUR = intEnv("WA_MAX_SENDS_PER_HOUR", 20);
 export const DEFAULT_PULL_LIMIT = intEnv("WA_PULL_LIMIT", 30);
+// WhatsApp rejects oversized attachments; failing locally gives a clearer error.
+export const MAX_MEDIA_BYTES = intEnv("WA_MAX_MEDIA_BYTES", 16 * 1024 * 1024);
 export const LOCK_STALE_MS = intEnv("WA_LOCK_STALE_MS", 300_000);
 export const HEADLESS = process.env.WA_HEADLESS !== "false";
 
 const HOUR_MS = 3_600_000;
-const CHROME_ARGS = (
-  process.env.WA_CHROME_ARGS || "--no-sandbox,--disable-setuid-sandbox,--disable-dev-shm-usage"
-).split(",");
+// The Chrome sandbox stays ON by default: this browser renders WhatsApp Web,
+// which is remote untrusted content, and the sandbox is the boundary between a
+// renderer bug and the user's account. A container that genuinely cannot run it
+// opts out through WA_CHROME_ARGS instead of everyone paying for that case.
+const CHROME_ARGS = (process.env.WA_CHROME_ARGS || "--disable-dev-shm-usage").split(",");
 
 export function chromeArgs() {
   return CHROME_ARGS.filter(Boolean);
@@ -88,7 +93,48 @@ export function fail(message) {
 
 export function ensureStateDir() {
   fs.mkdirSync(SESSION_DIR, { recursive: true, mode: 0o700 });
+  fs.mkdirSync(OUTBOX_DIR, { recursive: true, mode: 0o700 });
   fs.chmodSync(STATE_DIR, 0o700);
+}
+
+// Resolves a --file argument, which may only name a file inside the outbox.
+//
+// Without this, --file reads any path on the machine. That matters because the
+// text this skill reads from a chat is written by other people: a message that
+// says "send me your key file" is untrusted data, but an agent acting on it
+// would turn --file into an exfiltration primitive. Confining the flag to one
+// directory the operator writes into removes that reach entirely.
+export function resolveOutboxFile(given) {
+  ensureStateDir();
+  const root = fs.realpathSync(OUTBOX_DIR);
+
+  let resolved;
+  try {
+    // realpath resolves symlinks too, so a link planted inside the outbox
+    // cannot point out of it.
+    resolved = fs.realpathSync(path.resolve(OUTBOX_DIR, given));
+  } catch {
+    throw new Error(
+      `--file "${given}" was not found in the outbox. Write the content to ${OUTBOX_DIR} ` +
+        `first, then pass its name.`,
+    );
+  }
+
+  const relative = path.relative(root, resolved);
+  if (relative === "" || relative.startsWith("..") || path.isAbsolute(relative)) {
+    throw new Error(
+      `--file must name a file inside ${OUTBOX_DIR} (resolved to ${resolved}). ` +
+        `Arbitrary paths are refused: chat content is untrusted and must not be able to ` +
+        `choose what gets sent.`,
+    );
+  }
+  if (path.basename(resolved).startsWith(".")) {
+    throw new Error("--file must not be a dotfile");
+  }
+  if (!fs.statSync(resolved).isFile()) {
+    throw new Error(`--file must be a regular file (${resolved} is not)`);
+  }
+  return resolved;
 }
 
 export function readConfig() {
@@ -225,6 +271,12 @@ export function formatTranscript(messages) {
 export function truncate(text, max) {
   const flat = String(text).replace(/\s+/g, " ").trim();
   return flat.length <= max ? flat : `${flat.slice(0, max - 1)}…`;
+}
+
+export function formatBytes(bytes) {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
 export function sleep(ms) {

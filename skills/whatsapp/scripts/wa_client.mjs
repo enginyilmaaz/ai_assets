@@ -10,6 +10,7 @@ import fs from "node:fs";
 import {
   CHROME_PATH,
   HEADLESS,
+  MAX_MEDIA_BYTES,
   READY_TIMEOUT_MS,
   SEND_DELAY_MS,
   SESSION_DIR,
@@ -27,6 +28,8 @@ import {
 
 const GROUP_SUFFIX = "@g.us";
 const USER_SUFFIX = "@c.us";
+// An international number, with or without +, spaces, dashes or brackets.
+const PHONE_PATTERN = /^\+?[1-9]\d{9,14}$/;
 
 export async function loadLibrary() {
   try {
@@ -130,6 +133,15 @@ export async function resolveChatId(client, target) {
   if (alias) return typeof alias === "string" ? alias : alias.id;
   if (target.endsWith(GROUP_SUFFIX) || target.endsWith(USER_SUFFIX)) return target;
 
+  // A bare phone number is asked of WhatsApp rather than assembled into an id,
+  // so a number that is not on WhatsApp fails here instead of sending nowhere.
+  const digits = target.replace(/[\s()+-]/g, "");
+  if (PHONE_PATTERN.test(target.replace(/[\s()-]/g, ""))) {
+    const numberId = await client.getNumberId(digits);
+    if (!numberId) throw new Error(`${target} is not registered on WhatsApp`);
+    return numberId._serialized;
+  }
+
   const needle = target.toLowerCase();
   const groups = await listGroups(client);
   const matches = groups.filter((g) => g.name.toLowerCase().includes(needle));
@@ -220,6 +232,34 @@ export async function sendText(client, chatId, text, { quotedMessageId = null } 
   const options = quotedMessageId ? { quotedMessageId } : {};
   const sent = await client.sendMessage(chatId, text, options);
   return { id: sent.id?._serialized || null, ts: sent.timestamp || Math.floor(Date.now() / 1000) };
+}
+
+// Sends a file from the outbox as an attachment, with an optional caption.
+// Images and videos ride as media; anything else goes as a document so the
+// recipient gets the original file rather than a re-encoded preview.
+export async function sendMedia(client, chatId, filePath, { caption = null, asDocument = null } = {}) {
+  const { MessageMedia } = await loadLibrary();
+  const size = fs.statSync(filePath).size;
+  if (size > MAX_MEDIA_BYTES) {
+    throw new Error(
+      `${filePath} is ${size} bytes, over the ${MAX_MEDIA_BYTES}-byte limit. ` +
+        `Raise WA_MAX_MEDIA_BYTES only if WhatsApp will accept it.`,
+    );
+  }
+
+  const media = MessageMedia.fromFilePath(filePath);
+  const inline = /^(image|video)\//.test(media.mimetype || "");
+  const options = { sendMediaAsDocument: asDocument === null ? !inline : asDocument };
+  if (caption) options.caption = caption;
+
+  await sleep(SEND_DELAY_MS);
+  const sent = await client.sendMessage(chatId, media, options);
+  return {
+    id: sent.id?._serialized || null,
+    mimetype: media.mimetype,
+    bytes: size,
+    asDocument: options.sendMediaAsDocument,
+  };
 }
 
 // Resolves with the first incoming message in `chatId` after this call.

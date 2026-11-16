@@ -10,6 +10,9 @@ import fs from "node:fs";
 import {
   CHROME_PATH,
   HEADLESS,
+  ACK_POLL_MS,
+  ACK_SERVER,
+  ACK_TIMEOUT_MS,
   MAX_MEDIA_BYTES,
   READY_TIMEOUT_MS,
   SEND_DELAY_MS,
@@ -231,7 +234,25 @@ export async function sendText(client, chatId, text, { quotedMessageId = null } 
   await sleep(SEND_DELAY_MS);
   const options = quotedMessageId ? { quotedMessageId } : {};
   const sent = await client.sendMessage(chatId, text, options);
-  return { id: sent.id?._serialized || null, ts: sent.timestamp || Math.floor(Date.now() / 1000) };
+  const id = sent.id?._serialized || null;
+  return { id, ts: sent.timestamp || Math.floor(Date.now() / 1000), ack: await confirmDelivery(client, id) };
+}
+
+// Waits until WhatsApp confirms a sent message, and reports the ack it reached.
+//
+// This is polled rather than event-driven on purpose: the ack can land between
+// sendMessage() resolving and a listener being attached, and a missed event
+// would mean waiting out the whole timeout for something that already happened.
+// Returns the ack reached, or null if nothing confirmed in time.
+export async function confirmDelivery(client, messageId, { minAck = ACK_SERVER, timeoutMs = ACK_TIMEOUT_MS } = {}) {
+  if (!messageId) return null;
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    const msg = await client.getMessageById(messageId).catch(() => null);
+    if (msg && typeof msg.ack === "number" && (msg.ack >= minAck || msg.ack < 0)) return msg.ack;
+    await sleep(ACK_POLL_MS);
+  }
+  return null;
 }
 
 // Sends a file from the outbox as an attachment, with an optional caption.
@@ -254,11 +275,13 @@ export async function sendMedia(client, chatId, filePath, { caption = null, asDo
 
   await sleep(SEND_DELAY_MS);
   const sent = await client.sendMessage(chatId, media, options);
+  const id = sent.id?._serialized || null;
   return {
-    id: sent.id?._serialized || null,
+    id,
     mimetype: media.mimetype,
     bytes: size,
     asDocument: options.sendMediaAsDocument,
+    ack: await confirmDelivery(client, id),
   };
 }
 

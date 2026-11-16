@@ -14,6 +14,7 @@ import {
   DEFAULT_PULL_LIMIT,
   MAX_SENDS_PER_HOUR,
   OUTBOX_DIR,
+  ackLabel,
   formatBytes,
   SESSION_DIR,
   SKILL_DIR,
@@ -320,7 +321,12 @@ async function cmdSend() {
     const chatId = await resolveChatId(client, target);
     const sent = await sendText(client, chatId, text, { quotedMessageId: args.val("--quote") });
     recordSend(chatId);
-    emit({ ok: true, sent: true, chatId, messageId: sent.id, text: `SENT to ${chatId}\nid: ${sent.id}` }, asJson);
+    const report = deliveryReport(sent, chatId);
+    emit(
+      { ok: true, sent: report.confirmed, ack: report.ack, ackLabel: report.ackLabel, chatId,
+        messageId: sent.id, text: `${report.headline}\nid: ${sent.id}` },
+      asJson,
+    );
   });
 }
 
@@ -352,10 +358,12 @@ async function sendAttachment() {
     const chatId = await resolveChatId(client, target);
     const sent = await sendMedia(client, chatId, media, { caption, asDocument });
     recordSend(chatId);
+    const report = deliveryReport(sent, chatId);
     emit(
-      { ok: true, sent: true, chatId, messageId: sent.id, ...sent,
+      { ok: true, ...sent, sent: report.confirmed, ackLabel: report.ackLabel, chatId, messageId: sent.id,
         text:
-          `SENT ${sent.asDocument ? "as document" : "as media"} to ${chatId}\n` +
+          `${report.headline}\n` +
+          `rode as: ${sent.asDocument ? "document" : "inline media"}\n` +
           `file: ${media} (${sent.mimetype}, ${formatBytes(sent.bytes)})\nid: ${sent.id}` },
       asJson,
     );
@@ -386,13 +394,18 @@ async function cmdAsk() {
     const sent = await sendText(client, chatId, text, { quotedMessageId: args.val("--quote") });
     sentRef.id = sent.id;
     recordSend(chatId);
-    console.error(`sent (${sent.id}); waiting up to ${Math.round(waitMs / 1000)}s for a reply...`);
+    const report = deliveryReport(sent, chatId);
+    console.error(`${report.headline}; waiting up to ${Math.round(waitMs / 1000)}s for a reply...`);
 
     const reply = await pending;
     const body = reply
       ? `REPLY from ${reply.sender} at ${reply.time}:\n${reply.body || `<${reply.type}>`}`
       : `NO REPLY within ${Math.round(waitMs / 1000)}s. Read later with: wa.mjs pull --chat ${target}`;
-    emit({ ok: true, sent: true, chatId, messageId: sent.id, reply, text: `SENT\n\n${body}` }, asJson);
+    emit(
+      { ok: true, sent: report.confirmed, ack: report.ack, ackLabel: report.ackLabel, chatId,
+        messageId: sent.id, reply, text: `${report.headline}\n\n${body}` },
+      asJson,
+    );
   });
 }
 
@@ -425,6 +438,26 @@ function previewPayload(target, text, verb, file = null) {
       `----- message -----\n${text}\n-------------------\n` +
       `NOT SENT : re-run the same ${verb} with --confirm`,
   };
+}
+
+// Says what WhatsApp actually confirmed. A send that never left the queue must
+// not be reported as sent — that was the original defect: sendMessage() resolves
+// on a local queue, so "SENT" was printed for messages that never arrived.
+function deliveryReport(sent, chatId) {
+  const ack = sent.ack;
+  if (typeof ack === "number" && ack < 0) {
+    throw new Error(
+      `WhatsApp rejected the message (ack ${ack}) to ${chatId}. It was not delivered. ` +
+        `Check the recipient and try once more; do not loop.`,
+    );
+  }
+  const confirmed = typeof ack === "number" && ack >= 1;
+  const headline = confirmed
+    ? `SENT to ${chatId} (confirmed: ${ackLabel(ack)})`
+    : `QUEUED to ${chatId} — NOT CONFIRMED.\n` +
+      `WhatsApp did not acknowledge it in time, so it may never arrive. Check the chat with ` +
+      `"pull" before sending it again — resending blindly can deliver it twice.`;
+  return { confirmed, ack, ackLabel: ackLabel(ack), headline };
 }
 
 function requireChat() {

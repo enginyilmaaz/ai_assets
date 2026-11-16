@@ -163,11 +163,20 @@ some types, so a large file can still be refused on their side.
 ```
 2026-11-16 09:14  Mehmet: the migration is done, deploying now
 2026-11-16 09:20  me [re: "the migration is done…"]: which branch did you deploy?
+2026-11-16 09:31  Mehmet: <document> release notes
 ```
 
-`me` is the linked account. `[re: "…"]` marks a quoted message. A `<image>` or `<document>` in
-place of the body means a non-text message — its content is not available, so do not guess at it;
-say a file was sent and, if it matters, ask the user to look.
+`me` is the linked account. `[re: "…"]` marks a quoted message. A leading `<image>`,
+`<document>`, `<audio>` or similar means a file was sent; any text after it is only its caption.
+**The file's content is not available** — do not guess at it. Say a file was sent, and if it
+matters, ask the user to look.
+
+A send reports what WhatsApp actually confirmed, because `sendMessage` returns as soon as the
+message is queued locally rather than delivered:
+
+- `SENT … (confirmed: server|delivered)` — WhatsApp has it. This is the normal result.
+- `QUEUED … NOT CONFIRMED` — it may never arrive. Read the chat with `pull` before sending it
+  again; resending blindly can deliver it twice.
 
 ## Where things live
 
@@ -182,6 +191,7 @@ say a file was sent and, if it matters, ask the user to look.
 Everything is overridable by environment variable: `WA_STATE_DIR`, `WA_OUTBOX_DIR`,
 `WA_CHROME_PATH`, `WA_MAX_SENDS_PER_HOUR` (default 20), `WA_READY_TIMEOUT_MS`,
 `WA_WAIT_TIMEOUT_MS`, `WA_SEND_DELAY_MS`, `WA_MAX_MEDIA_BYTES` (default 16 MB),
+`WA_ACK_TIMEOUT_MS` (default 20 s), `WA_ACK_POLL_MS`,
 `WA_HEADLESS`, `WA_CHROME_ARGS`.
 
 **Chrome runs sandboxed.** `WA_CHROME_ARGS` defaults to `--disable-dev-shm-usage` only — the
@@ -201,6 +211,8 @@ move it to another machine.
 | `another wa command is already running` | Two runs would corrupt one Chrome profile. Wait, or remove the named lock file if a run crashed. |
 | `Chrome not found` | Install Google Chrome or point `WA_CHROME_PATH` at it. |
 | `did not become ready within …` | Chrome started but WhatsApp Web did not load — usually network, occasionally a WhatsApp-side change. Retry once, then report it. |
+| `QUEUED … NOT CONFIRMED` | WhatsApp did not acknowledge the send within `WA_ACK_TIMEOUT_MS`. Verify with `pull` before resending. |
+| `WhatsApp rejected the message` | A negative ack came back. It was not delivered; check the recipient and try once, not in a loop. |
 | `… is not registered on WhatsApp` | The number was resolved and WhatsApp does not know it. Check the country code. |
 | `… is over the …-byte limit` | The attachment is too big. Shrink it rather than raising the cap blindly. |
 | `--file must name a file inside …` | `--file` was given a path outside the outbox, a symlink out of it, a dotfile or a directory. Write the content into the outbox and pass its name. |

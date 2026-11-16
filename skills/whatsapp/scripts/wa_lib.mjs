@@ -32,6 +32,12 @@ export const MAX_SENDS_PER_HOUR = intEnv("WA_MAX_SENDS_PER_HOUR", 20);
 export const DEFAULT_PULL_LIMIT = intEnv("WA_PULL_LIMIT", 30);
 // WhatsApp rejects oversized attachments; failing locally gives a clearer error.
 export const MAX_MEDIA_BYTES = intEnv("WA_MAX_MEDIA_BYTES", 16 * 1024 * 1024);
+// sendMessage() resolves when WhatsApp Web has queued the message locally, not
+// when the server has it. Tearing the browser down at that point leaves the
+// message stuck at ack 0 forever, so a send waits for the ack to advance.
+export const ACK_TIMEOUT_MS = intEnv("WA_ACK_TIMEOUT_MS", 20_000);
+export const ACK_POLL_MS = intEnv("WA_ACK_POLL_MS", 400);
+export const ACK_SERVER = 1;
 export const LOCK_STALE_MS = intEnv("WA_LOCK_STALE_MS", 300_000);
 export const HEADLESS = process.env.WA_HEADLESS !== "false";
 
@@ -263,7 +269,10 @@ export function formatTranscript(messages) {
     .map((m) => {
       const who = m.fromMe ? "me" : m.sender;
       const quote = m.quoted ? ` [re: "${truncate(m.quoted, 40)}"]` : "";
-      return `${m.time}  ${who}${quote}: ${m.body || `<${m.type}>`}`;
+      // A captioned attachment carries the caption in `body`, so the type has to
+      // be shown as well or a file reads as an ordinary message.
+      const kind = m.type && m.type !== "chat" ? `<${m.type}> ` : "";
+      return `${m.time}  ${who}${quote}: ${kind}${m.body || "(no text)"}`;
     })
     .join("\n");
 }
@@ -271,6 +280,15 @@ export function formatTranscript(messages) {
 export function truncate(text, max) {
   const flat = String(text).replace(/\s+/g, " ").trim();
   return flat.length <= max ? flat : `${flat.slice(0, max - 1)}…`;
+}
+
+// WhatsApp's own ack ladder: -1 failed, 0 queued locally, 1 reached the
+// server, 2 reached the recipient's device, 3 read, 4 played.
+const ACK_LABELS = { "-1": "failed", 0: "queued", 1: "server", 2: "delivered", 3: "read", 4: "played" };
+
+export function ackLabel(ack) {
+  if (ack === null || ack === undefined) return "unconfirmed";
+  return ACK_LABELS[String(ack)] || `ack ${ack}`;
 }
 
 export function formatBytes(bytes) {

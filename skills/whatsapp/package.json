@@ -1,0 +1,11 @@
+{
+  "name": "whatsapp-skill",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "SMARINE WhatsApp skill — on-demand read/send in whitelisted chats via whatsapp-web.js",
+  "dependencies": {
+    "qrcode-terminal": "^0.12.0",
+    "whatsapp-web.js": "^1.26.0"
+  }
+}

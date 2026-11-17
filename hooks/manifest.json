@@ -24,6 +24,27 @@
         }
       },
       "dependencies": []
+    },
+    {
+      "id": "compact-context",
+      "icon": "restore",
+      "order": 20,
+      "name_en": "Post-compact context recovery",
+      "name_tr": "Compact sonras\u0131 ba\u011flam\u0131 geri getir",
+      "desc_en": "After every compaction, prints where the session transcript still holds the whole pre-compact conversation, how to search it without reloading it, and the project state the summary tends to drop (branch, uncommitted files, recent commits).",
+      "desc_tr": "Her compact sonras\u0131nda, compact \u00f6ncesi sohbetin tamam\u0131n\u0131 h\u00e2l\u00e2 bar\u0131nd\u0131ran transcript dosyas\u0131n\u0131n yolunu, onu ba\u015ftan y\u00fcklemeden nas\u0131l aranaca\u011f\u0131n\u0131 ve \u00f6zetin genelde kaybetti\u011fi proje durumunu (branch, commit'lenmemi\u015f dosyalar, son commit'ler) ba\u011flama basar.",
+      "event": "SessionStart",
+      "files": [
+        { "src": "compact-context/after-compact-context.js", "dest": "~/.claude/hooks/after-compact-context.js", "chmod": "0755" }
+      ],
+      "settings": {
+        "hooks": {
+          "SessionStart": [
+            { "matcher": "compact", "hooks": [ { "type": "command", "command": "node ~/.claude/hooks/after-compact-context.js", "timeout": 10, "statusMessage": "Post-compact context..." } ] }
+          ]
+        }
+      },
+      "dependencies": []
     }
   ]
 }

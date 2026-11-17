@@ -36,8 +36,11 @@ section a rules-manager app merges into `~/.claude/CLAUDE.md`.
 ## Hooks
 
 Standalone Claude Code hooks. `hooks/manifest.json` is the catalog; each hook ships its
-script under `hooks/<id>/` plus the `settings.json` fragment to install. Example:
-`voice-notify` — a Stop hook that speaks the finished task's title via edge-tts.
+script under `hooks/<id>/` plus the `settings.json` fragment to install.
+`voice-notify` is a Stop hook that plays a short notification sound when a tool-using turn
+ends; `compact-context` is a SessionStart hook, matching the `compact` source, that prints
+where the session transcript still holds the whole pre-compact conversation and what the
+project state is right now.
 
 ## Agents
 

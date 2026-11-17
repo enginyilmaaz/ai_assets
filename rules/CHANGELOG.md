@@ -2,6 +2,11 @@
 
 All notable changes to the global rules catalog are documented here.
 
+## [1.21.0] - 2026-11-17
+
+### Added
+- Rule: `compaction-transcript` (Compaction — the pre-compact conversation is still on disk) — compaction drops the conversation body from the context window, but the session's own transcript on disk still holds every message from before it, at `~/.claude/projects/<cwd-slug>/<session-id>.jsonl`, for as long as `cleanupPeriodDays` keeps it. So a detail that was already established earlier in the session — a file path, an ID, where a credential lives, a decision the user made, an approach they rejected — is never guessed, never asked for a second time and never re-derived: it is searched for in that file. The rule's hard limit is that the file is never read whole, by the agent or by a subagent, because it runs to tens of megabytes and loading it undoes the compaction in one shot; the search is bounded on both ends (`grep -h -i -- '<term>' "$T" | tail -15 | cut -c1-300`) and the term is narrowed before the window is widened. `compact_boundary` lines and their `compactMetadata` say how far back to look, not where to start reading forward. A recovered detail is named as recovered, in one line, so it is not mistaken for something remembered. The companion `compact-context` hook prints the exact path right after every compaction.
+
 ## [1.20.0] - 2026-11-09
 
 ### Changed

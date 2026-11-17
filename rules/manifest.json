@@ -200,6 +200,16 @@
       "name_tr": "Ajanın kendi klasörüne dokunma",
       "desc_en": "~/.claude and ~/.codex are the directories the agent runs out of — this session's transcript, shell snapshots, plugins, skills and credentials. Never delete, rename or move them on your own, and never put such a step in a subagent's instructions; verify empty-machine behaviour with a fake home under the temp folder. An explicit request takes two confirmations: an arithmetic question, then a typed confirmation word.",
       "desc_tr": "~/.claude ve ~/.codex ajanın altından çalıştığı dizinlerdir — bu oturumun transkripti, shell snapshot'ları, eklentileri, skill'leri ve kimlik bilgileri oradadır. Kendiliğinden asla silme, yeniden adlandırma veya taşıma; subagent talimatına da böyle bir adım yazma. Boş makine davranışı temp altında sahte bir home ile doğrulanır. Açık istek geldiğinde iki kademeli onay şart: önce bir aritmetik soru, sonra yazılı onay kelimesi."
+    },
+    {
+      "id": "compaction-transcript",
+      "file": "rules/compaction-transcript.md",
+      "icon": "restore_page",
+      "order": 122,
+      "name_en": "Compaction — recover from the transcript",
+      "name_tr": "Compact — transcript'ten geri al",
+      "desc_en": "After a compaction the conversation is gone from context but still on disk; search the session transcript for a missing detail instead of guessing, and never load it whole.",
+      "desc_tr": "Compact sonrası sohbet bağlamdan düşer ama diskte durur; eksik bir detayı tahmin etmek yerine session transcript'inde ara, dosyayı asla baştan yükleme."
     }
   ]
 }

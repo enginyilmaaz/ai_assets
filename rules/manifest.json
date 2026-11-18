@@ -72,6 +72,16 @@
       "desc_tr": "Bilmediğin sistemi önce çıkar (yapı, arama, ilgili skill'ler); klasör yapısı ve isimlendirmenin dışına çıkma; mevcut componentleri kopyalamak yerine yeniden kullan."
     },
     {
+      "id": "new-file-naming",
+      "file": "rules/new-file-naming.md",
+      "icon": "drive_file_rename_outline",
+      "order": 74,
+      "name_en": "Naming a new file",
+      "name_tr": "Yeni dosya isimlendirme",
+      "desc_en": "Take a new file's name, folder and structure from the modules that already do the same job — read several siblings and follow the closest match, never a name of your own. When no precedent exists anywhere, ask before naming it instead of coining the first name of a new family.",
+      "desc_tr": "Yeni bir dosyanın adını, klasörünü ve yapısını aynı işi hâlihazırda yapan modüllerden al — birkaç kardeşi oku ve en yakın eşleşmeyi izle, kendi uydurduğun adı asla kullanma. Hiçbir yerde emsal yoksa, yeni bir ailenin ilk adını sessizce koymak yerine isimlendirmeden önce sor."
+    },
+    {
       "id": "coding-conventions",
       "file": "rules/coding-conventions.md",
       "icon": "rule",

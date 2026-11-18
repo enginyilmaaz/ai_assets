@@ -2,6 +2,11 @@
 
 All notable changes to the global rules catalog are documented here.
 
+## [1.22.0] - 2026-11-18
+
+### Added
+- Rule: `new-file-naming` (Naming a new file — take the name from whatever already does the job) — a new file, class, helper, service or migration takes its name, folder and internal structure from the modules that already do the same job, not from a name the agent thought of; a coined name is a second convention and the second convention is the defect. Requires reading **several** siblings, because they carry a family of names rather than one, following the member whose job is closest, and naming the file the name and shape were taken from so the choice can be checked. Structure is covered as well as the name — placement, exports and wiring (barrel file, registration, startup call, DI) follow the precedent. Only when nothing comparable exists anywhere is it a genuine first creation, and then the agent **asks** — states that there is no precedent, proposes name and placement, and waits — because every later module has to copy or contradict that first name. A convention that cannot be derived from the siblings is reported as such instead of guessed.
+
 ## [1.21.0] - 2026-11-17
 
 ### Added

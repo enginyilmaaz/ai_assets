@@ -205,8 +205,12 @@ Merging is irreversible from this side and it publishes. Treat it like a non-dev
 4. The merge commit / squash message is subject to the same attribution rule. `--squash` composes a
    message out of the commits, so pass `--subject` and `--body` explicitly rather than letting it
    assemble one, and check what it would use first.
-5. **NEVER** `--admin` (it bypasses branch protection) and **NEVER** `--force`. If the merge is
-   blocked, report why and stop.
+5. **Branch protection: bypass only on an explicit merge request.** When the user asked for the
+   merge and GitHub blocks it (`BLOCKED` / `REVIEW_REQUIRED`), `gh pr merge --admin` is allowed:
+   name what it bypasses before running it (e.g. "required review on `erp-prod`") and report it
+   afterwards. Without an explicit merge request, never bypass — report why the merge is blocked
+   and stop. **NEVER** `--force`, and never bypass a PR whose checks are failing: rule 2 still
+   holds, that needs its own second yes.
 6. Deleting the branch after the merge (`--delete-branch`) is a deletion: only when the user asked
    for it.
 
